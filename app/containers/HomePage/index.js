@@ -14,15 +14,14 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 import ClassTitle from 'components/ClassTitle';
+import ClassSubTitle from 'components/ClassSubTitle';
 
 export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <div>
         <ClassTitle />
-        <div>
-          Class SubTitle
-        </div>
+        <ClassSubTitle />
       </div>
     );
   }
