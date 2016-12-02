@@ -5,17 +5,11 @@
 */
 
 import React from 'react';
+import styled from 'styled-components';
 
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-
-
-function ClassSubTitle() {
-  return (
-    <div>
-      <FormattedMessage {...messages.header} />
-    </div>
-  );
-}
+const ClassSubTitle = styled.div`
+  text-align: center;
+  color: palevioletred;
+`;
 
 export default ClassSubTitle;

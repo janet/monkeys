@@ -5,17 +5,11 @@
 */
 
 import React from 'react';
+import styled from 'styled-components';
 
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-
-
-function ClassTitle() {
-  return (
-    <div>
-      <FormattedMessage {...messages.header} />
-    </div>
-  );
-}
+const ClassTitle = styled.h2`
+  text-align: center;
+  color: palevioletred;
+`;
 
 export default ClassTitle;

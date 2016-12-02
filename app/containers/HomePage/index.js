@@ -20,8 +20,8 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
   render() {
     return (
       <div>
-        <ClassTitle />
-        <ClassSubTitle />
+        <ClassTitle>Sachan's Class Title</ClassTitle>
+        <ClassSubTitle>Sachan's Class Sub Title</ClassSubTitle>
       </div>
     );
   }
