@@ -13,6 +13,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
+import Button from 'components/Button';
 import ClassTitle from 'components/ClassTitle';
 import ClassSubTitle from 'components/ClassSubTitle';
 
@@ -20,8 +21,9 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
   render() {
     return (
       <div>
-        <ClassTitle>Sachan's Class Title</ClassTitle>
-        <ClassSubTitle>Sachan's Class Sub Title</ClassSubTitle>
+        <ClassTitle>Youth Jiu Jitsu</ClassTitle>
+        <ClassSubTitle>Wed 5/20 5-6pm</ClassSubTitle>
+        <Button />
       </div>
     );
   }
