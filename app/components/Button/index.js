@@ -4,20 +4,23 @@
 *
 */
 
-import React, { PropTypes, Children } from 'react';
+import React, { PropTypes } from 'react';
 
 import StyledButton from './StyledButton';
 
-class Button extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  render() {
-    return (
-      <div>
-      	<StyledButton>
-      		<i className="fa fa-play" />
-      	</StyledButton>
-      </div>
-    );
-  }
-}
+function Button(props) {
+  const { icon,
+          href } = props;
+
+  return (
+    <StyledButton>
+      <i className={icon} />
+    </StyledButton>
+  );
+};
+
+Button.propTypes = {
+  icon: PropTypes.string,
+};
 
 export default Button;
