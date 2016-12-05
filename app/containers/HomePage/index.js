@@ -10,30 +10,35 @@
  */
 
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
 
-import Button from 'components/Button';
 import Heading from 'components/Heading';
 
 export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <div>
-        <Heading level={2}
-        	       item={'Youth Jiu Jitsu'} />
-        <Heading level={4}
-            		 item={'Wed 5/20 5-6pm'}
-            		 icon={'fa fa-calendar'}
-            		 href={'calendar'} />
-        <Heading level={4}
-                 item={'Jiu Jitsu Virus'}
-                 icon={'fa fa-play'}
-                 href={'playvideo'} />
-        <Heading level={4}
-                 item={'Attendance 4'}
-                 icon={'fa fa-pencil'}
-                 href={'attendance'} />                                  
+        <Heading
+          level={2}
+          item={'Youth Jiu Jitsu'}
+        />
+        <Heading
+          level={4}
+          item={'Wed 5/20 5-6pm'}
+          icon={'fa fa-calendar'}
+          href={'calendar'}
+        />
+        <Heading
+          level={4}
+          item={'Jiu Jitsu Virus'}
+          icon={'fa fa-play'}
+          href={'playvideo'}
+        />
+        <Heading
+          level={4}
+          item={'Attendance 4'}
+          icon={'fa fa-pencil'}
+          href={'attendance'}
+        />
       </div>
     );
   }

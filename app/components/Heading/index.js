@@ -10,7 +10,6 @@ import Button from 'components/Button';
 import Item from './Item';
 
 function Heading(props) {
-
   const { level,
           item,
           icon,
@@ -34,6 +33,7 @@ Heading.propTypes = {
 };
 
 Heading.defaultProps = {
-  level: 1
-}
+  level: 1,
+};
+
 export default Heading;
