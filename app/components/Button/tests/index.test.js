@@ -1,11 +1,19 @@
-// import Button from '../index';
+import Button from '../index';
 
 import expect from 'expect';
-// import { shallow } from 'enzyme';
-// import React from 'react';
+import { shallow } from 'enzyme';
+import React from 'react';
 
 describe('<Button />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('to render', () => {
+    const renderedComponent = shallow(
+      <Button icon={'fa fa-play'} />
+    );
+    expect(
+      renderedComponent.find('button')
+    ).toExist();
+    expect(
+      renderedComponent.find('i').node
+    ).toExist();
   });
 });
