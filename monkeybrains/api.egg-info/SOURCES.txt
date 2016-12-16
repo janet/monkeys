@@ -1,7 +1,5 @@
 MANIFEST.in
 api/__init__.py
-api/api.py
-api/config.py
 api/database.py
 api/runserver.py
 api/schema.sql

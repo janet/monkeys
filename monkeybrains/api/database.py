@@ -1,6 +1,7 @@
 # import sqlite3
 from flask_sqlalchemy import SQLAlchemy
 
+from server import app
 
 db = SQLAlchemy()
 
@@ -11,8 +12,8 @@ def connect_db(app):
     db.init_app(app)
 
 
-if __name__ == "__main__":
-    from server import app
+@app.cli.command('connectdb')
+def connectdb_command():
+    """Initializes the database."""
     connect_db(app)
-
-    print('Connected to database.')
+    print('Connected to the database.')
