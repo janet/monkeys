@@ -5,9 +5,9 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 
 # create our little application :)
-app = Flask(__name__)
-app.config.from_object(__name__)
-# app.config.from_pyfile('config.py')
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_object('config')
+app.config.from_pyfile('config.py')
 
 # Load default config and override config from an environment variable
 app.config.update(dict(
