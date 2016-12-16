@@ -1,7 +1,6 @@
 -e git+git@github.com:janet/monkeys.git@c4b04aa85a35708f2fdf494b658174521bbfbd4a#egg=api&subdirectory=monkeybrains
 click==6.6
 enum34==1.1.6
-flake8==3.2.1
 Flask==0.11.1
 Flask-SQLAlchemy==2.1
 itsdangerous==0.24
@@ -9,6 +8,5 @@ Jinja2==2.8
 MarkupSafe==0.23
 mccabe==0.5.2
 pycodestyle==2.2.0
-pyflakes==1.3.0
 SQLAlchemy==1.1.4
 Werkzeug==0.11.11
