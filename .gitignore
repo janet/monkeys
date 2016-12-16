@@ -12,5 +12,8 @@ npm-debug.log
 # Virtual Env
 env/*
 
-# Python
+# Compiled Python files
 *.pyc
+
+# Instance Configuration
+monkeybrains/instance/*
