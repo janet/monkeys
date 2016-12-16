@@ -1,4 +1,4 @@
--e git+git@github.com:janet/monkeys.git@c4b04aa85a35708f2fdf494b658174521bbfbd4a#egg=api&subdirectory=monkeybrains
+-e git+git@github.com:janet/monkeys.git@d1c971e9a9e44979f6837f6066ef6dd4782ac3f4#egg=api&subdirectory=monkeybrains
 click==6.6
 enum34==1.1.6
 Flask==0.11.1
@@ -7,6 +7,7 @@ itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
 mccabe==0.5.2
+psycopg2==2.6.2
 pycodestyle==2.2.0
 SQLAlchemy==1.1.4
 Werkzeug==0.11.11
