@@ -1,13 +1,26 @@
--e git+git@github.com:janet/monkeys.git@d1c971e9a9e44979f6837f6066ef6dd4782ac3f4#egg=api&subdirectory=monkeybrains
+-e git+git@github.com:janet/monkeys.git@1a5f3311774b68da677b6c1d331c817ef11051bd#egg=api&subdirectory=monkeybrains
+appnope==0.1.0
 click==6.6
+decorator==4.0.10
 enum34==1.1.6
 Flask==0.11.1
 Flask-SQLAlchemy==2.1
+ipython==5.1.0
+ipython-genutils==0.1.0
 itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
 mccabe==0.5.2
+pexpect==4.2.1
+pickleshare==0.7.4
+prompt-toolkit==1.0.9
 psycopg2==2.6.2
+ptyprocess==0.5.1
 pycodestyle==2.2.0
+Pygments==2.1.3
+simplegeneric==0.8.1
+six==1.10.0
 SQLAlchemy==1.1.4
+traitlets==4.3.1
+wcwidth==0.1.7
 Werkzeug==0.11.11
