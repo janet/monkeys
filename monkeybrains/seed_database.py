@@ -35,6 +35,4 @@ if __name__ == "__main__":
     db.drop_all()
     db.create_all()
 
-    # import pdb; pdb.set_trace()
-
     load_student()
