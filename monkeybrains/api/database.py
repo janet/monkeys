@@ -14,9 +14,5 @@ def connect_db(app):
 
 @app.cli.command('connectdb')
 def connectdb_command():
-    """Initializes the database."""
+    """Connects to the database."""
     connect_db(app)
-    db.drop_all()
-    db.create_all()
-
-    print('Connected to the database.')
