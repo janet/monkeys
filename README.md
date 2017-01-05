@@ -1,21 +1,27 @@
 # To start development
 
-## 1. Database
+## Database
 Create local postgres database @ postgresql://localhost/monkeys
 
     $ createdb monkeys
 
 
-## 2. Api Server
+## Api Server
 
 Run server @ http://localhost:5000/
 
     $ python monkeybrains/api/runserver.py
 
-## 3. React Server
+## React Server
 
 Run server @ http://localhost:3000/
 
     $ npm run start
 
+Run tests
+
+    $ npm run test
+
+    # Run only the Button component tests
+    $ npm run test:watch -- --grep Button
 
