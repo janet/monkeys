@@ -5,6 +5,11 @@ Create local postgres database @ postgresql://localhost/monkeys
 
     $ createdb monkeys
 
+Add dummy data to database
+
+    $ cd monkeybrains
+    $ python seed_database.py
+
 
 ## Api Server
 
