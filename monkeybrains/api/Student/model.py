@@ -40,3 +40,25 @@ class StudentClassInstance(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return "<StudentClassInstance id={} student_id = {} class_instance_id={} attendance={}>".format(self.id, self.student_id, self.class_instance_id, self.attendance)
+
+
+class StudentClassSchedule(db.Model):
+    """tbd"""
+
+    __tablename__ = "student_class_schedule"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    class_schedule_id = db.Column(db.Integer, db.ForeignKey('class_schedule.id'), nullable=False)
+
+    # define a relationship to Student
+    student = db.relationship("Student",
+                           backref=db.backref("student_class_schedule", order_by=id))
+
+    # define a relationship to Class Schedule
+    class_schedule = db.relationship("ClassSchedule",
+                           backref=db.backref("student_class_schedule", order_by=id))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+        return "<StudentClassSchedule student_id = {} class_schedule_id = {}>".format(self.student_id, self.class_schedule_id)
