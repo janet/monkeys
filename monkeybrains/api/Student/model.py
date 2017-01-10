@@ -16,3 +16,27 @@ class Student(db.Model):
     def __repr__(self):
         """<Student id=1 name=Bobby Fisher>"""
         return "<Student id={0} name={1}>".format(self.id, self.name_first + ' ' + self.name_last)
+
+
+class StudentClassInstance(db.Model):
+    """tbd"""
+
+    __tablename__ = "student_class_instance"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    class_instance_id = db.Column(db.Integer, db.ForeignKey('class_instance.id'), nullable=False)
+    attendance = db.Column(db.String(1), nullable=False)
+    notes = db.Column(db.String, nullable=True)
+
+    # define a relationship to Student
+    student = db.relationship("Student",
+                              backref=db.backref("student_class_instance", order_by=id))
+
+    # define a relationship to ClassInstance
+    class_instance = db.relationship("ClassInstance",
+                                     backref=db.backref("student_class_instance", order_by=id))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+        return "<StudentClassInstance id={} student_id = {} class_instance_id={} attendance={}>".format(self.id, self.student_id, self.class_instance_id, self.attendance)

@@ -1,7 +1,7 @@
 import json
 
 from api.database import db, connect_db
-from api.Student.model import Student
+from api.Student.model import Student, StudentClassInstance
 from api.Coach.model import Coach
 from api.ClassSchedule.model import ClassSchedule, ClassInstance
 from server import app
@@ -47,19 +47,19 @@ def load_coach():
     db.session.commit()
 
 
-# def load_student_class_instance():
-#     """Load student class instance type from seed_data into database."""
-#     tablename = 'student_class_instance'
-#     data = jsonify_seed_data(tablename)
+def load_student_class_instance():
+    """Load student class instance type from seed_data into database."""
+    tablename = 'student_class_instance'
+    data = jsonify_seed_data(tablename)
 
-#     for item in data[tablename]:
-#         new_item = StudentClassInstance(
-#             student_id=item['student_id'],
-#             class_instance_id=item['class_instance_id'],
-#             attendance_id=item['attendance_id']
-#             )
-#         db.session.add(new_item)
-#     db.session.commit()
+    for item in data[tablename]:
+        new_item = StudentClassInstance(
+            student_id=item['student_id'],
+            class_instance_id=item['class_instance_id'],
+            attendance=item['attendance']
+            )
+        db.session.add(new_item)
+    db.session.commit()
 
 
 # def load_student_class_schedule():
@@ -114,3 +114,4 @@ if __name__ == "__main__":
     load_coach()
     load_class_schedule()
     load_class_instance()
+    load_student_class_instance()
