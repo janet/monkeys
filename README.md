@@ -17,7 +17,7 @@ First time only, install requirements
 	$ cd monkeybrains
 	$ virtualenv env
 	$ source env/bin/activate
-	$ pip install requirements.txt
+	$ (env) pip install -r requirements.txt
 
 Run server @ http://localhost:5000/
 
