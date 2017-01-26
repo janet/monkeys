@@ -1,21 +1,28 @@
 # To start development
 
 ## Database
-Create local postgres database @ postgresql://localhost/monkeys
+Create local postgres database @ postgresql://localhost/monkeys (first time only)
 
     $ createdb monkeys
 
-Add dummy data to database
+Add dummy data to database - can be re-run to reset database
 
     $ cd monkeybrains
     $ python seed_database.py
 
 
 ## Api Server
+First time only, install requirements
+
+	$ cd monkeybrains
+	$ virtualenv env
+	$ source env/bin/activate
+	$ pip install requirements.txt
 
 Run server @ http://localhost:5000/
 
-    $ python monkeybrains/api/runserver.py
+	$ source env/bin/activate
+	$ (env) python api/runserver.py
 
 ## React Server
 
