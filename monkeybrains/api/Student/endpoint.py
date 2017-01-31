@@ -1,4 +1,6 @@
 from server import app
+from api.Base.helper import to_json
+
 from .model import Student, StudentClassInstance, StudentClassSchedule
 
 
@@ -18,4 +20,6 @@ def get_student_class_instance():
 def get_student_class_schedule():
     saturday_class = StudentClassSchedule.query.filter(StudentClassSchedule.class_schedule_id == 3).all()
 
-    return [enrollment.student.name_first for enrollment in saturday_class][0]
+    enrolled_students = to_json(saturday_class)
+
+    return enrolled_students
