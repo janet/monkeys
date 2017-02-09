@@ -10,11 +10,22 @@
  */
 
 import React from 'react';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
 
+import { selectHomePage,
+         selectClassSchedule } from './selectors';
 import Heading from 'components/Heading';
+import { loadClassSchedule } from './actions';
 
-export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+
+  componentWillMount() {
+    this.props.onClickClassSchedule();
+  }
+
   render() {
+    console.log(this.props.classSchedule);
     return (
       <div>
         <Heading
@@ -43,3 +54,24 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
     );
   }
 }
+
+HomePage.propTypes = {
+  classSchedule: React.PropTypes.oneOfType([
+    React.PropTypes.array,
+    React.PropTypes.object,
+  ]),
+  onClickClassSchedule: React.PropTypes.func,
+};
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    onClickClassSchedule: () => dispatch(loadClassSchedule()),
+  };
+}
+
+const mapStateToProps = createStructuredSelector({
+  homePage: selectHomePage(),
+  classSchedule: selectClassSchedule(),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
