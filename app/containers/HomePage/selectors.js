@@ -2,12 +2,12 @@ import { createSelector } from 'reselect';
 
 const selectHomePage = () => (state) => state.get('homePage');
 
-const selectClassSchedule = () => createSelector(
+const selectStudentClassSchedule = () => createSelector(
   selectHomePage(),
-  (homePageState) => homePageState.get('classSchedule')
+  (homePageState) => homePageState.get('studentClassSchedule')
 );
 
 export {
   selectHomePage,
-  selectClassSchedule,
+  selectStudentClassSchedule,
 };

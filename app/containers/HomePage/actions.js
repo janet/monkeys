@@ -1,25 +1,25 @@
 import {
-  LOAD_CLASS_SCHEDULE,
-  LOAD_CLASS_SCHEDULE_SUCCESS,
-  LOAD_CLASS_SCHEDULE_ERROR,
+  LOAD_STUDENT_CLASS_SCHEDULE,
+  LOAD_STUDENT_CLASS_SCHEDULE_SUCCESS,
+  LOAD_STUDENT_CLASS_SCHEDULE_ERROR,
 } from './constants';
 
-export function loadClassSchedule() {
+export function loadStudentClassSchedule() {
   return {
-    type: LOAD_CLASS_SCHEDULE,
+    type: LOAD_STUDENT_CLASS_SCHEDULE,
   };
 }
 
-export function classScheduleLoaded(classSchedule) {
+export function studentClassScheduleLoaded(studentClassSchedule) {
   return {
-    type: LOAD_CLASS_SCHEDULE_SUCCESS,
-    classSchedule,
+    type: LOAD_STUDENT_CLASS_SCHEDULE_SUCCESS,
+    studentClassSchedule,
   };
 }
 
-export function classScheduleLoadingError(error) {
+export function studentClassScheduleLoadingError(error) {
   return {
-    type: LOAD_CLASS_SCHEDULE_ERROR,
+    type: LOAD_STUDENT_CLASS_SCHEDULE_ERROR,
     error,
   };
 }

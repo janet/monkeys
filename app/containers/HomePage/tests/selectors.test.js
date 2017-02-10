@@ -3,7 +3,7 @@ import expect from 'expect';
 
 import {
   selectHomePage,
-  selectClassSchedule,
+  selectStudentClassSchedule,
 } from '../selectors';
 
 describe('selectHomePage', () => {
@@ -19,15 +19,15 @@ describe('selectHomePage', () => {
   });
 });
 
-describe('selectClassSchedule', () => {
-  const classScheduleSelector = selectClassSchedule();
-  it('should select the classSchedule', () => {
-    const classSchedule = 'Paul';
+describe('selectStudentClassSchedule', () => {
+  const studentClassScheduleSelector = selectStudentClassSchedule();
+  it('should select the studentClassSchedule', () => {
+    const studentClassSchedule = 'Paul';
     const mockedState = fromJS({
       homePage: {
-        classSchedule,
+        studentClassSchedule,
       },
     });
-    expect(classScheduleSelector(mockedState)).toEqual(classSchedule);
+    expect(studentClassScheduleSelector(mockedState)).toEqual(studentClassSchedule);
   });
 });
