@@ -8,7 +8,6 @@ from api.database import db, connect_db
 from seed_database import (load_student, load_coach, load_class_schedule,
                            load_class_instance, load_student_class_instance,
                            load_student_class_schedule)
-from api.Student.model import StudentClassSchedule
 
 
 class ApiTestCase(unittest.TestCase):
@@ -36,7 +35,7 @@ class ApiTestCase(unittest.TestCase):
         os.close(self.db_fd)
         os.unlink(self.db_filename)
 
-    def test_get(self):
+    def test_get_student_class_schedule(self):
         response = self.app.get('/student_class_schedule')
 
         # convert data from byte to string
