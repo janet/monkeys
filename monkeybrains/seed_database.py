@@ -1,4 +1,5 @@
 import json
+import os
 
 from api.database import db, connect_db
 from api.Student.model import Student, StudentClassInstance, StudentClassSchedule
@@ -7,9 +8,13 @@ from api.ClassSchedule.model import ClassSchedule, ClassInstance
 from server import app
 
 
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+
 def jsonify_seed_data(tablename):
     """tbd"""
-    with open("seed_data/{}.json".format(tablename)) as data_file:
+    with open(os.path.join(__location__, "seed_data/{}.json".format(tablename))) as data_file:
         data = json.load(data_file)
 
     return data

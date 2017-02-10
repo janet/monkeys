@@ -24,6 +24,10 @@ Run server @ http://localhost:5000/
 	$ source env/bin/activate
 	$ (env) python api/runserver.py
 
+Run tests
+
+    $ (env) pytest
+
 ## React Server
 
 Run server @ http://localhost:3000/
