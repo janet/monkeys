@@ -21,3 +21,6 @@ monkeybrains/instance/*
 
 # Virtual Env
 monkeybrains/env/*
+
+# .cache
+monkeybrains/.cache/*
