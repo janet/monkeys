@@ -6,32 +6,32 @@ import { call,
          take } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
-import { LOAD_CLASS_SCHEDULE } from './constants';
-import { classScheduleLoaded, classScheduleLoadingError } from './actions';
+import { LOAD_STUDENT_CLASS_SCHEDULE } from './constants';
+import { studentClassScheduleLoaded, studentClassScheduleLoadingError } from './actions';
 import request from 'utils/request';
 
-export function* getClassSchedule() {
+export function* getStudentClassSchedule() {
   const requestURL = 'http://localhost:5000/student_class_schedule';
 
   try {
-    const classScheduleResult = yield call(request, requestURL);
-    yield put(classScheduleLoaded(classScheduleResult));
+    const studentClassScheduleResult = yield call(request, requestURL);
+    yield put(studentClassScheduleLoaded(studentClassScheduleResult));
   } catch (err) {
-    yield put(classScheduleLoadingError(err));
+    yield put(studentClassScheduleLoadingError(err));
   }
 }
 
-export function* getClassScheduleWatcher() {
-  yield fork(takeLatest, LOAD_CLASS_SCHEDULE, getClassSchedule);
+export function* getStudentClassScheduleWatcher() {
+  yield fork(takeLatest, LOAD_STUDENT_CLASS_SCHEDULE, getStudentClassSchedule);
 }
 
-export function* classScheduleData() {
-  const watcher = yield fork(getClassScheduleWatcher);
+export function* studentClassScheduleData() {
+  const watcher = yield fork(getStudentClassScheduleWatcher);
 
   yield take(LOCATION_CHANGE);
   yield cancel(watcher);
 }
 
 export default [
-  classScheduleData,
+  studentClassScheduleData,
 ];

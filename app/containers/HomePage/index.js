@@ -14,18 +14,18 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 import { selectHomePage,
-         selectClassSchedule } from './selectors';
+         selectStudentClassSchedule } from './selectors';
 import Heading from 'components/Heading';
-import { loadClassSchedule } from './actions';
+import { loadStudentClassSchedule } from './actions';
 
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
   componentWillMount() {
-    this.props.onClickClassSchedule();
+    this.props.onClickStudentClassSchedule();
   }
 
   render() {
-    console.log(this.props.classSchedule);
+    console.log(this.props.studentClassSchedule);
     return (
       <div>
         <Heading
@@ -56,22 +56,22 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 }
 
 HomePage.propTypes = {
-  classSchedule: React.PropTypes.oneOfType([
+  studentClassSchedule: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.object,
   ]),
-  onClickClassSchedule: React.PropTypes.func,
+  onClickStudentClassSchedule: React.PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onClickClassSchedule: () => dispatch(loadClassSchedule()),
+    onClickStudentClassSchedule: () => dispatch(loadStudentClassSchedule()),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
   homePage: selectHomePage(),
-  classSchedule: selectClassSchedule(),
+  studentClassSchedule: selectStudentClassSchedule(),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
