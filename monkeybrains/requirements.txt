@@ -1,10 +1,11 @@
--e git+git@github.com:janet/monkeys.git@bf9ca00b0dd96c265f6603d198b2031a24a0b481#egg=api&subdirectory=monkeybrains
+-e git+git@github.com:janet/monkeys.git@8dbc216869dead6b0d3b53f135739b95e23389fb#egg=api&subdirectory=monkeybrains
 appnope==0.1.0
 click==6.6
 decorator==4.0.10
 enum34==1.1.6
 Flask==0.11.1
 Flask-SQLAlchemy==2.1
+gunicorn==19.6.0
 ipython==5.1.0
 ipython-genutils==0.1.0
 itsdangerous==0.24
