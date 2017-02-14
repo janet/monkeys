@@ -1,14 +1,17 @@
 from datetime import datetime
 
+from api.Base.helper import to_json
 from server import app
+
 from .model import ClassSchedule
 from .model import ClassInstance
 
 
 @app.route('/class_schedule')
 def get_class_schedule():
-    class_schedule = ClassSchedule.query.filter(ClassSchedule.name == 'Youth Jiu Jitsu').first()
-    return class_schedule.name
+    class_schedule = ClassSchedule.query.all()
+    result = to_json(class_schedule)
+    return result
 
 
 @app.route('/class_instance')
