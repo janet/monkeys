@@ -4,6 +4,7 @@ import expect from 'expect';
 import {
   selectHomePage,
   selectStudentClassSchedule,
+  selectClassSchedule,
 } from '../selectors';
 
 describe('selectHomePage', () => {
@@ -22,12 +23,25 @@ describe('selectHomePage', () => {
 describe('selectStudentClassSchedule', () => {
   const studentClassScheduleSelector = selectStudentClassSchedule();
   it('should select the studentClassSchedule', () => {
-    const studentClassSchedule = 'Paul';
+    const studentClassSchedule = 'Youth Jiu Jitsu';
     const mockedState = fromJS({
       homePage: {
         studentClassSchedule,
       },
     });
     expect(studentClassScheduleSelector(mockedState)).toEqual(studentClassSchedule);
+  });
+});
+
+describe('selectClassSchedule', () => {
+  const classScheduleSelector = selectClassSchedule();
+  it('should select the classSchedule', () => {
+    const classSchedule = 'Youth Jiu Jitsu';
+    const mockedState = fromJS({
+      homePage: {
+        classSchedule,
+      },
+    });
+    expect(classScheduleSelector(mockedState)).toEqual(classSchedule);
   });
 });
