@@ -20,7 +20,7 @@ npm-debug.log
 monkeybrains/instance/*
 
 # Virtual Env
-monkeybrains/env/*
+monkeybrains_env/*
 
 # .cache
 monkeybrains/.cache/*

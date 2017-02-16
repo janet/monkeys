@@ -1,5 +1,25 @@
 # To start development
 
+## Api Server
+First time only, create python 3 env and install requirements and app
+
+    $ virtualenv -p python3 monkeybrains_env
+    $ source monkeybrains_env/bin/activate
+    $ (monkeybrains_env) pip install -r requirements.txt
+    $ (monkeybrains_env) cd monkeybrains
+    $ (monkeybrains_env) export FLASK_APP=api
+    $ (monkeybrains_env) pip install --editable .
+
+Run server @ http://localhost:5000/
+
+    $ source monkeybrains_env/bin/activate
+    $ (monkeybrains_env) cd monkeybrains
+    $ (monkeybrains_env) python api/runserver.py
+
+Run tests
+
+    $ (monkeybrains_env) pytest
+
 ## Database
 Create local postgres database @ postgresql://localhost/monkeys (first time only)
 
@@ -7,26 +27,9 @@ Create local postgres database @ postgresql://localhost/monkeys (first time only
 
 Add dummy data to database - can be re-run to reset database
 
-    $ cd monkeybrains
-    $ python seed_database.py
+    $ (monkeybrains_env) cd monkeybrains
+    $ (monkeybrains_env) python seed_database.py
 
-
-## Api Server
-First time only, install requirements
-
-	$ cd monkeybrains
-	$ virtualenv env
-	$ source env/bin/activate
-	$ (env) pip install -r requirements.txt
-
-Run server @ http://localhost:5000/
-
-	$ source env/bin/activate
-	$ (env) python api/runserver.py
-
-Run tests
-
-    $ (env) pytest
 
 ## React Server
 
