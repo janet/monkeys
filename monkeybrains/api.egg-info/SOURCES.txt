@@ -2,7 +2,6 @@ MANIFEST.in
 api/__init__.py
 api/database.py
 api/runserver.py
-api/schema.sql
 api.egg-info/PKG-INFO
 api.egg-info/SOURCES.txt
 api.egg-info/dependency_links.txt
