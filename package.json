@@ -1,15 +1,15 @@
 {
-  "name": "react-boilerplate",
-  "version": "3.3.3",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
+  "name": "sbg-monkeys",
+  "version": "1.0.0",
+  "description": "An app for the SBG kids program",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mxstbr/react-boilerplate.git"
+    "url": "git://github.com/janet/monkeys.git"
   },
   "engines": {
     "npm": ">=3"
   },
-  "author": "Max Stoiber",
+  "author": "Janet Kenmotsu",
   "license": "MIT",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
