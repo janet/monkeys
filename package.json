@@ -7,7 +7,8 @@
     "url": "git://github.com/janet/monkeys.git"
   },
   "engines": {
-    "npm": ">=3"
+    "npm": "3.10.9",
+    "node": "7.2.0"
   },
   "author": "Janet Kenmotsu",
   "license": "MIT",
