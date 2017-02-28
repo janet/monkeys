@@ -11,7 +11,7 @@ import { classScheduleLoaded, classScheduleLoadingError,
          studentClassScheduleLoaded, studentClassScheduleLoadingError } from './actions';
 import request from 'utils/request';
 
-// set test url for tests to pass
+// set test url for tests to pass because Karma doesn't read process.env variables
 const apiUrl = typeof process.env.API_URL !== 'undefined' ? process.env.API_URL : 'test/url';
 
 export function* getStudentClassSchedule() {
