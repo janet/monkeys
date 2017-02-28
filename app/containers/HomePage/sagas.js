@@ -11,8 +11,11 @@ import { classScheduleLoaded, classScheduleLoadingError,
          studentClassScheduleLoaded, studentClassScheduleLoadingError } from './actions';
 import request from 'utils/request';
 
+// set test url for tests to pass
+const apiUrl = typeof process.env.API_URL !== 'undefined' ? process.env.API_URL : 'test/url';
+
 export function* getStudentClassSchedule() {
-  const requestURL = 'http://localhost:5000/student_class_schedule';
+  const requestURL = `${apiUrl}/student_class_schedule`;
 
   try {
     const studentClassScheduleResult = yield call(request, requestURL);
@@ -34,7 +37,7 @@ export function* studentClassScheduleData() {
 }
 
 export function* getClassSchedule() {
-  const requestURL = 'http://localhost:5000/class_schedule';
+  const requestURL = `${apiUrl}/class_schedule`;
 
   try {
     const classScheduleResult = yield call(request, requestURL);
