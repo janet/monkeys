@@ -72,7 +72,7 @@ HomePage.propTypes = {
   onClickClassSchedule: React.PropTypes.func,
 };
 
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     onClickStudentClassSchedule: () => dispatch(loadStudentClassSchedule()),
     onClickClassSchedule: () => dispatch(loadClassSchedule()),
