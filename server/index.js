@@ -3,6 +3,8 @@
 const express = require('express');
 const logger = require('./logger');
 
+const fs = require('fs');
+
 const argv = require('minimist')(process.argv.slice(2));
 const setup = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
@@ -19,13 +21,18 @@ setup(app, {
   publicPath: '/',
 });
 
-// get the intended port number, use port 3000 if not provided
-const port = argv.port || process.env.PORT || 3000;
+// hardcoded port to 3000 to make prod nginx conf work
+const port = 3000;
 
 // Start your app.
 app.listen(port, (err) => {
   if (err) {
     return logger.error(err.message);
+  }
+
+  // create file for nginx-buildpack
+  if (process.env.NODE_ENV === 'production') {
+    fs.openSync('/tmp/app-initialized', 'w');
   }
 
   // Connect to ngrok in dev mode
