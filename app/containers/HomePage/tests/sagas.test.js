@@ -21,7 +21,7 @@ describe('getStudentClassSchedule Saga', () => {
   beforeEach(() => {
     getStudentClassScheduleGenerator = getStudentClassSchedule();
 
-    const requestURL = 'http://localhost:5000/student_class_schedule';
+    const requestURL = 'api/student_class_schedule';
     const callDescriptor = getStudentClassScheduleGenerator.next().value;
     expect(callDescriptor).toEqual(call(request, requestURL));
   });
@@ -77,7 +77,7 @@ describe('getClassSchedule Saga', () => {
   beforeEach(() => {
     getClassScheduleGenerator = getClassSchedule();
 
-    const requestURL = 'http://localhost:5000/class_schedule';
+    const requestURL = 'api/class_schedule';
     const callDescriptor = getClassScheduleGenerator.next().value;
     expect(callDescriptor).toEqual(call(request, requestURL));
   });

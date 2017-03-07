@@ -11,8 +11,9 @@ import { classScheduleLoaded, classScheduleLoadingError,
          studentClassScheduleLoaded, studentClassScheduleLoadingError } from './actions';
 import request from 'utils/request';
 
+
 export function* getStudentClassSchedule() {
-  const requestURL = 'http://localhost:5000/student_class_schedule';
+  const requestURL = 'api/student_class_schedule';
 
   try {
     const studentClassScheduleResult = yield call(request, requestURL);
@@ -34,7 +35,7 @@ export function* studentClassScheduleData() {
 }
 
 export function* getClassSchedule() {
-  const requestURL = 'http://localhost:5000/class_schedule';
+  const requestURL = 'api/class_schedule';
 
   try {
     const classScheduleResult = yield call(request, requestURL);
