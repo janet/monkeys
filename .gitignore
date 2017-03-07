@@ -12,15 +12,3 @@ npm-debug.log
 # tags
 .tags
 .tags_sorted_by_file
-
-# Compiled Python files
-*.pyc
-
-# Instance Configuration
-monkeybrains/instance/*
-
-# Virtual Env
-monkeybrains_env/*
-
-# .cache
-monkeybrains/.cache/*
