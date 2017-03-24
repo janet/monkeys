@@ -11,6 +11,9 @@ import {
   LOAD_CLASS_INSTANCE,
   LOAD_CLASS_INSTANCE_SUCCESS,
   LOAD_CLASS_INSTANCE_ERROR,
+  LOAD_STUDENT_CLASS_INSTANCE,
+  LOAD_STUDENT_CLASS_INSTANCE_SUCCESS,
+  LOAD_STUDENT_CLASS_INSTANCE_ERROR,
 } from './constants';
 
 // STUDENTS
@@ -51,6 +54,27 @@ export function classInstanceLoaded(classInstance) {
 export function classInstanceLoadingError(error) {
   return {
     type: LOAD_CLASS_INSTANCE_ERROR,
+    error,
+  };
+}
+
+// STUDENT CLASS INSTANCE
+export function loadStudentClassInstance() {
+  return {
+    type: LOAD_STUDENT_CLASS_INSTANCE,
+  };
+}
+
+export function studentClassInstanceLoaded(studentClassInstance) {
+  return {
+    type: LOAD_STUDENT_CLASS_INSTANCE_SUCCESS,
+    studentClassInstance,
+  };
+}
+
+export function studentClassInstanceLoadingError(error) {
+  return {
+    type: LOAD_STUDENT_CLASS_INSTANCE_ERROR,
     error,
   };
 }

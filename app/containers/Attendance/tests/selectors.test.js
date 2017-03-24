@@ -2,7 +2,8 @@ import { fromJS } from 'immutable';
 import expect from 'expect';
 
 import { selectAttendance, selectStudents,
-         selectClassInstance, selectCurrentClass } from '../selectors';
+         selectClassInstance, selectCurrentClass,
+         selectStudentClassInstance } from '../selectors';
 
 describe('selectAttendance', () => {
   const attendanceSelector = selectAttendance();
@@ -67,5 +68,27 @@ describe('selectCurrentClass', () => {
       },
     });
     expect(currentClassSelector(mockedState)).toEqual(currentClass);
+  });
+});
+
+describe('selectStudentClassInstance', () => {
+  const studentClassInstanceSelector = selectStudentClassInstance();
+  it('should select the student class instance', () => {
+    const studentClassInstance = fromJS([
+      {
+        student_id: 1,
+        class_instance_id: 1,
+      },
+      {
+        student_id: 2,
+        class_instance_id: 1,
+      },
+    ]);
+    const mockedState = fromJS({
+      attendance: {
+        studentClassInstance,
+      },
+    });
+    expect(studentClassInstanceSelector(mockedState)).toEqual(studentClassInstance);
   });
 });

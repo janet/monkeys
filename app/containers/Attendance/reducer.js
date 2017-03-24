@@ -13,12 +13,16 @@ import {
   LOAD_CLASS_INSTANCE,
   LOAD_CLASS_INSTANCE_SUCCESS,
   LOAD_CLASS_INSTANCE_ERROR,
+  LOAD_STUDENT_CLASS_INSTANCE,
+  LOAD_STUDENT_CLASS_INSTANCE_SUCCESS,
+  LOAD_STUDENT_CLASS_INSTANCE_ERROR,
 } from './constants';
 
 const initialState = fromJS({
   students: [],
   classInstance: {},
   currentClass: 1, // hardcode for now
+  studentClassInstance: [],
   error: false,
 });
 
@@ -38,6 +42,14 @@ function attendanceReducer(state = initialState, action) {
       return state
         .set('classInstance', action.classInstance);
     case LOAD_CLASS_INSTANCE_ERROR:
+      return state
+        .set('error', action.error);
+    case LOAD_STUDENT_CLASS_INSTANCE:
+      return state;
+    case LOAD_STUDENT_CLASS_INSTANCE_SUCCESS:
+      return state
+        .set('studentClassInstance', action.studentClassInstance);
+    case LOAD_STUDENT_CLASS_INSTANCE_ERROR:
       return state
         .set('error', action.error);
     default:
