@@ -1,4 +1,6 @@
 import expect from 'expect';
+import { fromJS } from 'immutable';
+
 import { takeLatest } from 'redux-saga';
 import { take,
          call,
@@ -9,10 +11,13 @@ import { take,
 import { LOCATION_CHANGE } from 'react-router-redux';
 
 import { getStudents, getStudentsWatcher, studentsData, STUDENTS_URL,
-         getClassInstance, getClassInstanceWatcher, classInstanceData, CLASS_INSTANCE_URL } from '../sagas';
-import { LOAD_STUDENTS, LOAD_CLASS_INSTANCE } from '../constants';
+         getClassInstance, getClassInstanceWatcher, classInstanceData, CLASS_INSTANCE_URL,
+         getStudentClassInstance, getStudentClassInstanceWatcher,
+         studentClassInstanceData, STUDENT_CLASS_INSTANCE_URL } from '../sagas';
+import { LOAD_STUDENTS, LOAD_CLASS_INSTANCE, LOAD_STUDENT_CLASS_INSTANCE } from '../constants';
 import { studentsLoaded, studentsLoadingError,
-         classInstanceLoaded, classInstanceLoadingError } from '../actions';
+         classInstanceLoaded, classInstanceLoadingError,
+         studentClassInstanceLoaded, studentClassInstanceLoadingError } from '../actions';
 import { selectCurrentClass } from '../selectors';
 
 import request from 'utils/request';
@@ -130,6 +135,75 @@ describe('classInstanceData Saga', () => {
   it('should finally cancel() the forked getClassInstanceWatcher saga',
     function* classInstanceDataSagaCancellable() {
       forkDescriptor = classInstanceDataSaga.next(put(LOCATION_CHANGE));
+      expect(forkDescriptor.value).toEqual(cancel(forkDescriptor));
+    }
+  );
+});
+
+describe('getStudentClassInstance Saga', () => {
+  let getStudentClassInstanceGenerator;
+
+  beforeEach(() => {
+    getStudentClassInstanceGenerator = getStudentClassInstance();
+
+    const selectDescriptor = getStudentClassInstanceGenerator.next().value;
+    expect(selectDescriptor).toEqual(select(selectCurrentClass()));
+
+    const requestURL = `${STUDENT_CLASS_INSTANCE_URL}/${currentClass}`;
+    const callDescriptor = getStudentClassInstanceGenerator.next(currentClass).value;
+    expect(callDescriptor).toEqual(call(request, requestURL));
+  });
+
+  it('should dispatch the studentClassInstanceLoaded action if it requests the data successfully', () => {
+    const response = [
+      fromJS({
+        student_id: 1,
+        class_instance_id: 1,
+      }),
+      fromJS({
+        student_id: 2,
+        class_instance_id: 1,
+      }),
+    ];
+    const putDescriptor = getStudentClassInstanceGenerator.next(response).value;
+    expect(putDescriptor).toEqual(put(studentClassInstanceLoaded(response)));
+  });
+
+  it('should call the studentClassInstanceLoadingError action if the response errors', () => {
+    const response = new Error('Some Error');
+    const putDescriptor = getStudentClassInstanceGenerator.throw(response).value;
+    expect(putDescriptor).toEqual(put(studentClassInstanceLoadingError(response)));
+  });
+});
+
+describe('getStudentClassInstanceWatcher Saga', () => {
+  const getStudentClassInstanceWatcherGenerator = getStudentClassInstanceWatcher();
+
+  it('should watch for the LOAD_STUDENT_CLASS_INSTANCE action', () => {
+    const takeDescriptor = getStudentClassInstanceWatcherGenerator.next().value;
+    expect(takeDescriptor).toEqual(fork(takeLatest, LOAD_STUDENT_CLASS_INSTANCE, getStudentClassInstance));
+  });
+});
+
+
+describe('studentClassInstanceData Saga', () => {
+  const studentClassInstanceDataSaga = studentClassInstanceData();
+
+  let forkDescriptor;
+
+  it('should asyncronously fork the getStudentClassInstanceWatcher saga', () => {
+    forkDescriptor = studentClassInstanceDataSaga.next();
+    expect(forkDescriptor.value).toEqual(fork(getStudentClassInstanceWatcher));
+  });
+
+  it('should yield until LOCATION_CHANGE action', () => {
+    const takeDescriptor = studentClassInstanceDataSaga.next();
+    expect(takeDescriptor.value).toEqual(take(LOCATION_CHANGE));
+  });
+
+  it('should finally cancel the forked getStudentClassInstanceWatcher saga',
+    function* studentClassInstanceDataSagaCancellable() {
+      forkDescriptor = studentClassInstanceDataSaga.next(put(LOCATION_CHANGE));
       expect(forkDescriptor.value).toEqual(cancel(forkDescriptor));
     }
   );

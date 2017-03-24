@@ -1,4 +1,5 @@
 import expect from 'expect';
+import { fromJS } from 'immutable';
 
 import {
   loadStudents,
@@ -7,6 +8,9 @@ import {
   loadClassInstance,
   classInstanceLoaded,
   classInstanceLoadingError,
+  loadStudentClassInstance,
+  studentClassInstanceLoaded,
+  studentClassInstanceLoadingError,
 } from '../actions';
 
 import {
@@ -16,6 +20,9 @@ import {
   LOAD_CLASS_INSTANCE,
   LOAD_CLASS_INSTANCE_SUCCESS,
   LOAD_CLASS_INSTANCE_ERROR,
+  LOAD_STUDENT_CLASS_INSTANCE,
+  LOAD_STUDENT_CLASS_INSTANCE_SUCCESS,
+  LOAD_STUDENT_CLASS_INSTANCE_ERROR,
 } from '../constants';
 
 describe('Attendance actions', () => {
@@ -86,6 +93,51 @@ describe('Attendance actions', () => {
       };
 
       expect(classInstanceLoadingError(fixture)).toEqual(expected);
+    });
+  });
+
+  describe('loadStudentClassInstance', () => {
+    it('should return the correct type', () => {
+      const expected = {
+        type: LOAD_STUDENT_CLASS_INSTANCE,
+      };
+
+      expect(loadStudentClassInstance()).toEqual(expected);
+    });
+  });
+
+  describe('studentClassInstanceLoaded', () => {
+    it('should return the correct type and the passed student class instance', () => {
+      const fixture = [
+        fromJS({
+          student_id: 1,
+          class_instance_id: 1,
+        }),
+        fromJS({
+          student_id: 2,
+          class_instance_id: 1,
+        }),
+      ];
+      const expected = {
+        type: LOAD_STUDENT_CLASS_INSTANCE_SUCCESS,
+        studentClassInstance: fixture,
+      };
+
+      expect(studentClassInstanceLoaded(fixture)).toEqual(expected);
+    });
+  });
+
+  describe('studentClassInstanceLoadingError', () => {
+    it('should return the correct type and the error', () => {
+      const fixture = {
+        msg: 'i is error',
+      };
+      const expected = {
+        type: LOAD_STUDENT_CLASS_INSTANCE_ERROR,
+        error: fixture,
+      };
+
+      expect(studentClassInstanceLoadingError(fixture)).toEqual(expected);
     });
   });
 });
