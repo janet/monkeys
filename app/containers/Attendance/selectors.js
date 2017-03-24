@@ -7,8 +7,19 @@ const selectStudents = () => createSelector(
   (attendanceState) => attendanceState.get('students')
 );
 
-export default selectAttendance;
+const selectClassInstance = () => createSelector(
+  selectAttendance(),
+  (attendanceState) => attendanceState.get('classInstance')
+);
+
+const selectCurrentClass = () => createSelector(
+  selectAttendance(),
+  (attendanceState) => attendanceState.get('currentClass')
+);
+
 export {
   selectAttendance,
   selectStudents,
+  selectClassInstance,
+  selectCurrentClass,
 };

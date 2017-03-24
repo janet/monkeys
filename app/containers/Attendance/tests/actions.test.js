@@ -4,12 +4,18 @@ import {
   loadStudents,
   studentsLoaded,
   studentsLoadingError,
+  loadClassInstance,
+  classInstanceLoaded,
+  classInstanceLoadingError,
 } from '../actions';
 
 import {
   LOAD_STUDENTS,
   LOAD_STUDENTS_SUCCESS,
   LOAD_STUDENTS_ERROR,
+  LOAD_CLASS_INSTANCE,
+  LOAD_CLASS_INSTANCE_SUCCESS,
+  LOAD_CLASS_INSTANCE_ERROR,
 } from '../constants';
 
 describe('Attendance actions', () => {
@@ -45,6 +51,41 @@ describe('Attendance actions', () => {
       };
 
       expect(studentsLoadingError(fixture)).toEqual(expected);
+    });
+  });
+
+  describe('loadClassInstance', () => {
+    it('should return the correct type', () => {
+      const expected = {
+        type: LOAD_CLASS_INSTANCE,
+      };
+      expect(loadClassInstance()).toEqual(expected);
+    });
+  });
+
+  describe('classInstanceLoaded', () => {
+    it('should return the correct type and the passed classInstance', () => {
+      const fixture = { date: 'Mon, 05/02/16' };
+      const expected = {
+        type: LOAD_CLASS_INSTANCE_SUCCESS,
+        classInstance: fixture,
+      };
+
+      expect(classInstanceLoaded(fixture)).toEqual(expected);
+    });
+  });
+
+  describe('classInstanceLoadingError', () => {
+    it('should return the correct type and the error', () => {
+      const fixture = {
+        msg: 'Something is wrong',
+      };
+      const expected = {
+        type: LOAD_CLASS_INSTANCE_ERROR,
+        error: fixture,
+      };
+
+      expect(classInstanceLoadingError(fixture)).toEqual(expected);
     });
   });
 });

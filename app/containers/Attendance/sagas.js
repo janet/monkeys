@@ -3,11 +3,14 @@ import { call,
          cancel,
          fork,
          put,
+         select,
          take } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
-import { LOAD_STUDENTS } from './constants';
-import { studentsLoaded, studentsLoadingError } from './actions';
+import { LOAD_STUDENTS, LOAD_CLASS_INSTANCE } from './constants';
+import { studentsLoaded, studentsLoadingError,
+         classInstanceLoaded, classInstanceLoadingError } from './actions';
+import { selectCurrentClass } from './selectors';
 import request from 'utils/request';
 
 
@@ -35,7 +38,33 @@ export function* studentsData() {
   yield cancel(watcher);
 }
 
+export const CLASS_INSTANCE_URL = 'api/class_instance';
+
+export function* getClassInstance() {
+  const currentClass = yield select(selectCurrentClass());
+  const requestURL = `${CLASS_INSTANCE_URL}/${currentClass}`;
+
+  try {
+    const classInstanceResult = yield call(request, requestURL);
+    yield put(classInstanceLoaded(classInstanceResult));
+  } catch (err) {
+    yield put(classInstanceLoadingError(err));
+  }
+}
+
+export function* getClassInstanceWatcher() {
+  yield fork(takeLatest, LOAD_CLASS_INSTANCE, getClassInstance);
+}
+
+export function* classInstanceData() {
+  const watcher = yield fork(getClassInstanceWatcher);
+
+  yield take(LOCATION_CHANGE);
+  yield cancel(watcher);
+}
+
 // All sagas to be loaded
 export default [
   studentsData,
+  classInstanceData,
 ];

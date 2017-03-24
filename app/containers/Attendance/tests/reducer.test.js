@@ -6,6 +6,9 @@ import {
   loadStudents,
   studentsLoaded,
   studentsLoadingError,
+  loadClassInstance,
+  classInstanceLoaded,
+  classInstanceLoadingError,
 } from '../actions';
 
 
@@ -14,6 +17,8 @@ describe('attendanceReducer', () => {
   beforeEach(() => {
     state = fromJS({
       students: [],
+      classInstance: {},
+      currentClass: 1,
       error: false,
     });
   });
@@ -52,5 +57,34 @@ describe('attendanceReducer', () => {
       .set('error', fixture);
 
     expect(attendanceReducer(state, studentsLoadingError(fixture))).toEqual(expected);
+  });
+
+  it('should handle the loadClassInstance action correctly', () => {
+    const expected = state;
+
+    expect(attendanceReducer(state, loadClassInstance())).toEqual(expected);
+  });
+
+  it('should handle the classInstanceLoaded action correctly', () => {
+    const fixture = fromJS({
+      substitute_coach_id: null,
+      id: 1,
+      notes: null,
+      class_schedule_id: 1,
+      date: 'Mon, 05/02/16',
+    });
+    const expected = state.set('classInstance', fixture);
+
+    expect(attendanceReducer(state, classInstanceLoaded(fixture))).toEqual(expected);
+  });
+
+  it('should handle the classInstanceLoadingError action correctly', () => {
+    const fixture = {
+      msg: 'i am error',
+    };
+    const expected = state
+      .set('error', fixture);
+
+    expect(attendanceReducer(state, classInstanceLoadingError(fixture))).toEqual(expected);
   });
 });
