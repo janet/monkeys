@@ -5,6 +5,8 @@ import { selectAttendance, selectStudents,
          selectClassInstance, selectCurrentClass,
          selectStudentClassInstance } from '../selectors';
 
+import { students, classInstance, studentClassInstance, currentClass } from './fixtures';
+
 describe('selectAttendance', () => {
   const attendanceSelector = selectAttendance();
 
@@ -22,73 +24,85 @@ describe('selectAttendance', () => {
 describe('selectStudents', () => {
   const studentsSelector = selectStudents();
   it('should select the students', () => {
-    const students =
-      fromJS({
-        id: 1,
-        student_name: 'Paul',
-        rank_stripes: 2,
-        program: 'Gorilla',
-      });
     const mockedState = fromJS({
       attendance: {
-        students,
+        students: {
+          data: students,
+          loaded: false,
+          loading: false,
+          error: false,
+        },
       },
     });
-    expect(studentsSelector(mockedState)).toEqual(students);
+    const expected = fromJS({
+      data: students,
+      loaded: false,
+      loading: false,
+      error: false,
+    });
+    expect(studentsSelector(mockedState)).toEqual(expected);
   });
 });
 
 describe('selectClassInstance', () => {
   const classInstanceSelector = selectClassInstance();
   it('should select the class instance', () => {
-    const classInstance =
-      fromJS({
-        substitute_coach_id: null,
-        id: 1,
-        notes: null,
-        class_schedule_id: 1,
-        date: 'Mon, 05/02/16',
-      });
     const mockedState = fromJS({
       attendance: {
-        classInstance,
+        classInstance: {
+          data: classInstance,
+          loading: false,
+          error: false,
+        },
       },
     });
-    expect(classInstanceSelector(mockedState)).toEqual(classInstance);
+    const expected = fromJS({
+      data: classInstance,
+      loading: false,
+      error: false,
+    });
+    expect(classInstanceSelector(mockedState)).toEqual(expected);
   });
 });
 
 describe('selectCurrentClass', () => {
   const currentClassSelector = selectCurrentClass();
   it('should select the current class', () => {
-    const currentClass = 1;
     const mockedState = fromJS({
       attendance: {
-        currentClass,
+        currentClass: {
+          data: currentClass,
+          loading: false,
+          error: false,
+        },
       },
     });
-    expect(currentClassSelector(mockedState)).toEqual(currentClass);
+    const expected = fromJS({
+      data: currentClass,
+      loading: false,
+      error: false,
+    });
+    expect(currentClassSelector(mockedState)).toEqual(expected);
   });
 });
 
 describe('selectStudentClassInstance', () => {
   const studentClassInstanceSelector = selectStudentClassInstance();
   it('should select the student class instance', () => {
-    const studentClassInstance = fromJS([
-      {
-        student_id: 1,
-        class_instance_id: 1,
-      },
-      {
-        student_id: 2,
-        class_instance_id: 1,
-      },
-    ]);
     const mockedState = fromJS({
       attendance: {
-        studentClassInstance,
+        studentClassInstance: {
+          data: studentClassInstance,
+          loading: false,
+          error: false,
+        },
       },
     });
-    expect(studentClassInstanceSelector(mockedState)).toEqual(studentClassInstance);
+    const expected = fromJS({
+      data: studentClassInstance,
+      loading: false,
+      error: false,
+    });
+    expect(studentClassInstanceSelector(mockedState)).toEqual(expected);
   });
 });

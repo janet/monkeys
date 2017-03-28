@@ -18,40 +18,75 @@ import {
   LOAD_STUDENT_CLASS_INSTANCE_ERROR,
 } from './constants';
 
-const initialState = fromJS({
-  students: [],
-  classInstance: {},
+export const initialState = fromJS({
+  students: {
+    loading: false,
+    loaded: false,
+    error: false,
+    data: [],
+  },
+  classInstance: {
+    loading: false,
+    loaded: false,
+    error: false,
+    data: {},
+  },
   currentClass: 1, // hardcode for now
-  studentClassInstance: [],
-  error: false,
+  studentClassInstance: {
+    loading: false,
+    loaded: false,
+    error: false,
+    data: {},
+  },
 });
 
 function attendanceReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_STUDENTS:
-      return state;
+      return state
+        .setIn(['students', 'loading'], true)
+        .setIn(['students', 'error'], false);
     case LOAD_STUDENTS_SUCCESS:
       return state
-        .set('students', action.students);
+        .setIn(['students', 'loading'], false)
+        .setIn(['students', 'loaded'], true)
+        .setIn(['students', 'error'], false)
+        .setIn(['students', 'data'], action.students);
     case LOAD_STUDENTS_ERROR:
       return state
-        .set('error', action.error);
+        .setIn(['students', 'loading'], false)
+        .setIn(['students', 'loaded'], false)
+        .setIn(['students', 'error'], action.error);
     case LOAD_CLASS_INSTANCE:
-      return state;
+      return state
+        .setIn(['classInstance', 'loading'], true)
+        .setIn(['classInstance', 'error'], false);
     case LOAD_CLASS_INSTANCE_SUCCESS:
       return state
-        .set('classInstance', action.classInstance);
+        .setIn(['classInstance', 'loading'], false)
+        .setIn(['classInstance', 'loaded'], true)
+        .setIn(['classInstance', 'error'], false)
+        .setIn(['classInstance', 'data'], action.classInstance);
     case LOAD_CLASS_INSTANCE_ERROR:
       return state
-        .set('error', action.error);
+        .setIn(['classInstance', 'loading'], false)
+        .setIn(['classInstance', 'loaded'], false)
+        .setIn(['classInstance', 'error'], action.error);
     case LOAD_STUDENT_CLASS_INSTANCE:
-      return state;
+      return state
+        .setIn(['studentClassInstance', 'loading'], true)
+        .setIn(['studentClassInstance', 'error'], false);
     case LOAD_STUDENT_CLASS_INSTANCE_SUCCESS:
       return state
-        .set('studentClassInstance', action.studentClassInstance);
+        .setIn(['studentClassInstance', 'loading'], false)
+        .setIn(['studentClassInstance', 'loaded'], true)
+        .setIn(['studentClassInstance', 'error'], false)
+        .setIn(['studentClassInstance', 'data'], action.studentClassInstance);
     case LOAD_STUDENT_CLASS_INSTANCE_ERROR:
       return state
-        .set('error', action.error);
+        .setIn(['studentClassInstance', 'loading'], false)
+        .setIn(['studentClassInstance', 'loaded'], false)
+        .setIn(['studentClassInstance', 'error'], action.error);
     default:
       return state;
   }
