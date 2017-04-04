@@ -1,7 +1,6 @@
 import expect from 'expect';
-import { fromJS } from 'immutable';
 
-import attendanceReducer from '../reducer';
+import attendanceReducer, { initialState } from '../reducer';
 import {
   loadStudents,
   studentsLoaded,
@@ -13,18 +12,13 @@ import {
   studentClassInstanceLoaded,
   studentClassInstanceLoadingError,
 } from '../actions';
+import { students, classInstance, studentClassInstance, errorMessage } from './fixtures';
 
 
 describe('attendanceReducer', () => {
   let state;
   beforeEach(() => {
-    state = fromJS({
-      students: [],
-      classInstance: {},
-      currentClass: 1,
-      studentClassInstance: [],
-      error: false,
-    });
+    state = initialState;
   });
 
   it('returns the initial state', () => {
@@ -33,95 +27,79 @@ describe('attendanceReducer', () => {
   });
 
   it('should handle the loadStudents action correctly', () => {
-    const expected = state;
+    const expected = state
+      .setIn(['students', 'loading'], true)
+      .setIn(['students', 'error'], false);
 
     expect(attendanceReducer(state, loadStudents())).toEqual(expected);
   });
 
   it('should handle the studentsLoaded action correctly', () => {
-    const fixture = [
-      fromJS({
-        id: 1,
-        student_name: 'Paul',
-        rank_stripes: 2,
-        program: 'Gorilla',
-      }),
-    ];
     const expected = state
-      .set('students', fixture);
+      .setIn(['students', 'loading'], false)
+      .setIn(['students', 'loaded'], true)
+      .setIn(['students', 'data'], students);
 
-    expect(attendanceReducer(state, studentsLoaded(fixture))).toEqual(expected);
+    expect(attendanceReducer(state, studentsLoaded(students))).toEqual(expected);
   });
 
   it('should handle the studentsLoadingError action correctly', () => {
-    const fixture = {
-      msg: 'i am error',
-    };
     const expected = state
-      .set('error', fixture);
+      .setIn(['students', 'loading'], false)
+      .setIn(['students', 'loaded'], false)
+      .setIn(['students', 'error'], errorMessage);
 
-    expect(attendanceReducer(state, studentsLoadingError(fixture))).toEqual(expected);
+    expect(attendanceReducer(state, studentsLoadingError(errorMessage))).toEqual(expected);
   });
 
   it('should handle the loadClassInstance action correctly', () => {
-    const expected = state;
+    const expected = state
+      .setIn(['classInstance', 'loading'], true)
+      .setIn(['classInstance', 'error'], false);
 
     expect(attendanceReducer(state, loadClassInstance())).toEqual(expected);
   });
 
   it('should handle the classInstanceLoaded action correctly', () => {
-    const fixture = fromJS({
-      substitute_coach_id: null,
-      id: 1,
-      notes: null,
-      class_schedule_id: 1,
-      date: 'Mon, 05/02/16',
-    });
-    const expected = state.set('classInstance', fixture);
+    const expected = state
+      .setIn(['classInstance', 'loading'], false)
+      .setIn(['classInstance', 'loaded'], true)
+      .setIn(['classInstance', 'data'], classInstance);
 
-    expect(attendanceReducer(state, classInstanceLoaded(fixture))).toEqual(expected);
+    expect(attendanceReducer(state, classInstanceLoaded(classInstance))).toEqual(expected);
   });
 
   it('should handle the classInstanceLoadingError action correctly', () => {
-    const fixture = {
-      msg: 'i am error',
-    };
     const expected = state
-      .set('error', fixture);
+      .setIn(['classInstance', 'loading'], false)
+      .setIn(['classInstance', 'loaded'], false)
+      .setIn(['classInstance', 'error'], errorMessage);
 
-    expect(attendanceReducer(state, classInstanceLoadingError(fixture))).toEqual(expected);
+    expect(attendanceReducer(state, classInstanceLoadingError(errorMessage))).toEqual(expected);
   });
 
   it('should handle the loadStudentClassInstance action correctly', () => {
-    const expected = state;
+    const expected = state
+      .setIn(['studentClassInstance', 'loading'], true);
 
     expect(attendanceReducer(state, loadStudentClassInstance())).toEqual(expected);
   });
 
   it('should handle the studentClassInstanceLoaded action correctly', () => {
-    const fixture = [
-      fromJS({
-        student_id: 1,
-        class_instance_id: 1,
-      }),
-      fromJS({
-        student_id: 2,
-        class_instance_id: 1,
-      }),
-    ];
     const expected = state
-      .set('studentClassInstance', fixture);
+      .setIn(['studentClassInstance', 'loading'], false)
+      .setIn(['studentClassInstance', 'loaded'], true)
+      .setIn(['studentClassInstance', 'data'], studentClassInstance);
 
-    expect(attendanceReducer(state, studentClassInstanceLoaded(fixture))).toEqual(expected);
+    expect(attendanceReducer(state, studentClassInstanceLoaded(studentClassInstance))).toEqual(expected);
   });
 
   it('should handle the studentClassInstanceLoadingError action correctly', () => {
-    const fixture = {
-      msg: 'i am error',
-    };
     const expected = state
-      .set('error', fixture);
+      .setIn(['studentClassInstance', 'loading'], false)
+      .setIn(['studentClassInstance', 'loaded'], false)
+      .setIn(['studentClassInstance', 'error'], errorMessage);
 
-    expect(attendanceReducer(state, studentClassInstanceLoadingError(fixture))).toEqual(expected);
+    expect(attendanceReducer(state, studentClassInstanceLoadingError(errorMessage))).toEqual(expected);
   });
 });

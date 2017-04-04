@@ -11,8 +11,11 @@ import { connect } from 'react-redux';
 import { selectAttendance,
          selectStudents,
          selectClassInstance,
-         selectStudentClassInstance } from './selectors';
+         selectStudentClassInstance,
+         selectCurrentClass } from './selectors';
 import { loadStudents, loadClassInstance, loadStudentClassInstance } from './actions';
+import AttendanceList from 'components/AttendanceList';
+
 
 export class Attendance extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
@@ -22,13 +25,60 @@ export class Attendance extends React.PureComponent { // eslint-disable-line rea
     this.props.onLoadStudentClassInstance();
   }
 
+  getCurrentClassStudents(students, studentClassInstance) {
+    const currentClassStudents = studentClassInstance.map((sci) => {
+      const newObj = {
+        ...sci,
+        student: students.filter((student) => sci.student_id === student.id)[0],
+      };
+      return newObj;
+    });
+    return currentClassStudents;
+  }
+
   render() {
-    console.log(this.props.students);
+    let mainContent = null;
+
     console.log(this.props.classInstance);
-    console.log(this.props.studentClassInstance);
+    const { students,
+            studentClassInstance } = this.props;
+
+    const studentsLoaded = students ? students.get('loaded') : null;
+    const studentClassInstanceLoaded = studentClassInstance ? studentClassInstance.get('loaded') : null;
+
+    let currentClassStudents;
+    if (studentsLoaded === true && studentClassInstanceLoaded === true) {
+      currentClassStudents = this.getCurrentClassStudents(students.get('data'), studentClassInstance.get('data'));
+    }
+
+    // Table dimensions
+    const rowHeight = 50;
+    const rowsCount = currentClassStudents ? currentClassStudents.length : 0;
+    // height is the number of rows plus the header multiplied by the row height plus a 2 pixel border
+    const height = currentClassStudents ? ((currentClassStudents.length + 1) * rowHeight) + 2 : 0;
+    const width = 350;
+    const nameWidth = 200;
+    const attendanceWidth = width - nameWidth;
+
+    if (!currentClassStudents) {
+      mainContent = (<div></div>);
+    } else {
+      mainContent = (
+        <AttendanceList
+          rowsCount={rowsCount}
+          rowHeight={rowHeight}
+          width={width}
+          height={height}
+          currentClassStudents={currentClassStudents}
+          nameWidth={nameWidth}
+          attendanceWidth={attendanceWidth}
+        />
+      );
+    }
+
     return (
       <div>
-      hi sachan
+        {mainContent}
       </div>
     );
   }
@@ -54,9 +104,10 @@ const mapStateToProps = createStructuredSelector({
   students: selectStudents(),
   classInstance: selectClassInstance(),
   studentClassInstance: selectStudentClassInstance(),
+  currentClass: selectCurrentClass(),
 });
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   return {
     onLoadStudents: () => dispatch(loadStudents()),
     onLoadClassInstance: () => dispatch(loadClassInstance()),
