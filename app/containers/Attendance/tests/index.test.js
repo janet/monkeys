@@ -8,7 +8,7 @@ import { mount } from 'enzyme';
 import { Map } from 'immutable';
 
 import { Attendance, mapDispatchToProps } from '../index';
-import { loadStudents, loadClassInstance, loadStudentClassInstance } from '../actions';
+import { loadStudents, loadClassInstance, loadStudentClassInstance, changeStudentClassInstanceAttendance } from '../actions';
 import { students, studentClassInstance } from './fixtures';
 import AttendanceList from 'components/AttendanceList';
 
@@ -17,18 +17,21 @@ describe('<Attendance />', () => {
     const loadStudentsSpy = expect.createSpy();
     const loadClassInstanceSpy = expect.createSpy();
     const loadStudentClassInstanceSpy = expect.createSpy();
+    const changeStudentClassInstanceAttendanceSpy = expect.createSpy();
 
     const renderedComponent = mount(
       <Attendance
         onLoadStudents={loadStudentsSpy}
         onLoadClassInstance={loadClassInstanceSpy}
         onLoadStudentClassInstance={loadStudentClassInstanceSpy}
+        changeStudentClassInstanceAttendance={changeStudentClassInstanceAttendanceSpy}
       />
     );
 
     expect(loadStudentsSpy).toHaveBeenCalled();
     expect(loadClassInstanceSpy).toHaveBeenCalled();
     expect(loadStudentClassInstanceSpy).toHaveBeenCalled();
+    expect(changeStudentClassInstanceAttendanceSpy).toNotHaveBeenCalled();
     expect(renderedComponent.contains(<div></div>)).toEqual(true);
   });
 
@@ -46,6 +49,7 @@ describe('<Attendance />', () => {
         onLoadStudents={() => {}}
         onLoadClassInstance={() => {}}
         onLoadStudentClassInstance={() => {}}
+        onChangeStudentClassInstanceAttendance={() => {}}
         students={studentsState}
         studentClassInstance={studentClassInstanceState}
         classInstance={{}}
@@ -84,7 +88,7 @@ describe('<Attendance />', () => {
       });
     });
     describe('onLoadStudentClassInstance', () => {
-      it('sholud be injected', () => {
+      it('should be injected', () => {
         const dispatch = expect.createSpy();
         const result = mapDispatchToProps(dispatch);
         expect(result.onLoadStudentClassInstance).toExist();
@@ -95,6 +99,21 @@ describe('<Attendance />', () => {
         const result = mapDispatchToProps(dispatch);
         result.onLoadStudentClassInstance();
         expect(dispatch).toHaveBeenCalledWith(loadStudentClassInstance());
+      });
+    });
+    describe('onChangeStudentClassInstanceAttendance', () => {
+      it('should be injected', () => {
+        const dispatch = expect.createSpy();
+        const result = mapDispatchToProps(dispatch);
+        expect(result.onChangeStudentClassInstanceAttendance).toExist();
+      });
+      it('should dispatch changeStudentClassInstanceAttendance when called', () => {
+        const dispatch = expect.createSpy();
+        const result = mapDispatchToProps(dispatch);
+        const id = 1;
+        const attendance = 'P';
+        result.onChangeStudentClassInstanceAttendance(id, attendance);
+        expect(dispatch).toHaveBeenCalledWith(changeStudentClassInstanceAttendance(id, attendance));
       });
     });
   });

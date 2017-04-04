@@ -1,4 +1,6 @@
-export const students = [
+import { fromJS } from 'immutable';
+
+export const students = fromJS([
   {
     id: 1,
     name_first: 'Paul',
@@ -31,29 +33,37 @@ export const students = [
     rank_type: 'white',
     program: 'monkey',
   },
-];
+]);
 
-export const studentClassInstance = [
+export const studentClassInstance = fromJS([
   {
+    id: 1,
     student_id: 1,
     class_instance_id: 1,
+    attendance: 'P',
   },
   {
+    id: 2,
     student_id: 2,
     class_instance_id: 1,
+    attendance: 'A',
   },
-];
+]);
 
-export const classInstance = {
+export const classInstance = fromJS({
   substitute_coach_id: null,
   id: 1,
   notes: null,
   class_schedule_id: 1,
   date: 'Mon, 05/02/16',
-};
+});
 
 export const errorMessage = {
   msg: 'i am error',
 };
 
 export const currentClass = 1;
+
+export const tardyAttendance = 'T';
+
+export const studentClassInstanceId = 1;

@@ -14,6 +14,9 @@ import {
   LOAD_STUDENT_CLASS_INSTANCE,
   LOAD_STUDENT_CLASS_INSTANCE_SUCCESS,
   LOAD_STUDENT_CLASS_INSTANCE_ERROR,
+  CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE,
+  // CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE_SUCCESS,
+  // CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE_ERROR,
 } from './constants';
 
 // STUDENTS
@@ -78,3 +81,26 @@ export function studentClassInstanceLoadingError(error) {
     error,
   };
 }
+
+export function changeStudentClassInstanceAttendance(attendance, studentClassInstanceId) {
+  return {
+    type: CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE,
+    attendance,
+    studentClassInstanceId,
+  };
+}
+
+// export function studentClassInstanceAttendanceChanged(attendance, studentClassInstance) {
+//   return {
+//     type: CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE_SUCCESS,
+//     attendance,
+//     studentClassInstance,
+//   };
+// }
+
+// export function studentClassInstanceAttendanceChangingError(error) {
+//   return {
+//     type: CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE_ERROR,
+//     error,
+//   };
+// }
