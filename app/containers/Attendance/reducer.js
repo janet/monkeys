@@ -16,6 +16,7 @@ import {
   LOAD_STUDENT_CLASS_INSTANCE,
   LOAD_STUDENT_CLASS_INSTANCE_SUCCESS,
   LOAD_STUDENT_CLASS_INSTANCE_ERROR,
+  CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE,
 } from './constants';
 
 export const initialState = fromJS({
@@ -36,7 +37,7 @@ export const initialState = fromJS({
     loading: false,
     loaded: false,
     error: false,
-    data: {},
+    data: [],
   },
 });
 
@@ -51,12 +52,12 @@ function attendanceReducer(state = initialState, action) {
         .setIn(['students', 'loading'], false)
         .setIn(['students', 'loaded'], true)
         .setIn(['students', 'error'], false)
-        .setIn(['students', 'data'], action.students);
+        .mergeIn(['students', 'data'], action.students);
     case LOAD_STUDENTS_ERROR:
       return state
         .setIn(['students', 'loading'], false)
         .setIn(['students', 'loaded'], false)
-        .setIn(['students', 'error'], action.error);
+        .mergeIn(['students', 'error'], action.error);
     case LOAD_CLASS_INSTANCE:
       return state
         .setIn(['classInstance', 'loading'], true)
@@ -66,12 +67,12 @@ function attendanceReducer(state = initialState, action) {
         .setIn(['classInstance', 'loading'], false)
         .setIn(['classInstance', 'loaded'], true)
         .setIn(['classInstance', 'error'], false)
-        .setIn(['classInstance', 'data'], action.classInstance);
+        .mergeIn(['classInstance', 'data'], action.classInstance);
     case LOAD_CLASS_INSTANCE_ERROR:
       return state
         .setIn(['classInstance', 'loading'], false)
         .setIn(['classInstance', 'loaded'], false)
-        .setIn(['classInstance', 'error'], action.error);
+        .mergeIn(['classInstance', 'error'], action.error);
     case LOAD_STUDENT_CLASS_INSTANCE:
       return state
         .setIn(['studentClassInstance', 'loading'], true)
@@ -81,12 +82,19 @@ function attendanceReducer(state = initialState, action) {
         .setIn(['studentClassInstance', 'loading'], false)
         .setIn(['studentClassInstance', 'loaded'], true)
         .setIn(['studentClassInstance', 'error'], false)
-        .setIn(['studentClassInstance', 'data'], action.studentClassInstance);
+        .mergeIn(['studentClassInstance', 'data'], action.studentClassInstance);
     case LOAD_STUDENT_CLASS_INSTANCE_ERROR:
       return state
         .setIn(['studentClassInstance', 'loading'], false)
         .setIn(['studentClassInstance', 'loaded'], false)
-        .setIn(['studentClassInstance', 'error'], action.error);
+        .mergeIn(['studentClassInstance', 'error'], action.error);
+    case CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE: {
+      const studentClassInstances = state.getIn(['studentClassInstance', 'data']);
+      const studentClassInstanceIndex = studentClassInstances.findIndex(
+        (studentClassInstance) => studentClassInstance.get('id') === action.studentClassInstanceId);
+      return state
+        .setIn(['studentClassInstance', 'data', studentClassInstanceIndex, 'attendance'], action.attendance);
+    }
     default:
       return state;
   }

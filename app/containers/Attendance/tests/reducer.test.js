@@ -11,6 +11,7 @@ import {
   loadStudentClassInstance,
   studentClassInstanceLoaded,
   studentClassInstanceLoadingError,
+  changeStudentClassInstanceAttendance,
 } from '../actions';
 import { students, classInstance, studentClassInstance, errorMessage } from './fixtures';
 
@@ -101,5 +102,16 @@ describe('attendanceReducer', () => {
       .setIn(['studentClassInstance', 'error'], errorMessage);
 
     expect(attendanceReducer(state, studentClassInstanceLoadingError(errorMessage))).toEqual(expected);
+  });
+
+  it('should handle the changeStudentClassInstanceAttendance action correctly', () => {
+    const studentClassInstanceIndex = 0;
+    const attendance = 'T';
+    const id = 1;
+    const startingState = state
+      .mergeIn(['studentClassInstance', 'data'], studentClassInstance);
+    const expected = startingState
+      .setIn(['studentClassInstance', 'data', studentClassInstanceIndex, 'attendance'], attendance);
+    expect(attendanceReducer(startingState, changeStudentClassInstanceAttendance(attendance, id))).toEqual(expected);
   });
 });

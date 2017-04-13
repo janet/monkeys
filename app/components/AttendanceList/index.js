@@ -7,11 +7,8 @@
 import React, { PropTypes } from 'react';
 import { Table, Column, Cell } from 'fixed-data-table-2';
 
-export const attendanceIcon = {
-  A: 'fa fa-square-o',
-  P: 'fa fa-check-square-o',
-  T: 'fa fa-minus-square-o',
-};
+import AttendanceCell from 'components/AttendanceCell';
+
 
 function AttendanceList(props) {
   const {
@@ -22,6 +19,7 @@ function AttendanceList(props) {
     currentClassStudents,
     nameWidth,
     attendanceWidth,
+    changeAttendance,
   } = props;
 
   return (
@@ -36,7 +34,7 @@ function AttendanceList(props) {
         header={<Cell>Name</Cell>}
         cell={(columnProps) => (
           <Cell {...columnProps}>
-            {typeof currentClassStudents !== 'undefined' ? currentClassStudents[columnProps.rowIndex].student.name_first : ''}
+            {currentClassStudents[columnProps.rowIndex].student.name_first}
           </Cell>
         )}
         width={nameWidth}
@@ -44,9 +42,12 @@ function AttendanceList(props) {
       <Column
         header={<Cell>Attendance</Cell>}
         cell={(columnProps) => (
-          <Cell {...columnProps}>
-            <i className={typeof currentClassStudents !== 'undefined' ? attendanceIcon[currentClassStudents[columnProps.rowIndex].attendance] : ''} />
-          </Cell>
+          <AttendanceCell
+            columnProps={columnProps}
+            attendance={currentClassStudents[columnProps.rowIndex].attendance}
+            studentClassInstanceId={currentClassStudents[columnProps.rowIndex].id}
+            changeAttendance={changeAttendance}
+          />
         )}
         width={attendanceWidth}
       />
@@ -62,6 +63,7 @@ AttendanceList.propTypes = {
   nameWidth: PropTypes.number,
   attendanceWidth: PropTypes.number,
   currentClassStudents: PropTypes.array,
+  changeAttendance: PropTypes.func,
 };
 
 export default AttendanceList;

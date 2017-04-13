@@ -13,7 +13,7 @@ import { selectAttendance,
          selectClassInstance,
          selectStudentClassInstance,
          selectCurrentClass } from './selectors';
-import { loadStudents, loadClassInstance, loadStudentClassInstance } from './actions';
+import { loadStudents, loadClassInstance, loadStudentClassInstance, changeStudentClassInstanceAttendance } from './actions';
 import AttendanceList from 'components/AttendanceList';
 
 
@@ -41,14 +41,17 @@ export class Attendance extends React.PureComponent { // eslint-disable-line rea
 
     console.log(this.props.classInstance);
     const { students,
-            studentClassInstance } = this.props;
+            studentClassInstance,
+            onChangeStudentClassInstanceAttendance } = this.props;
 
     const studentsLoaded = students ? students.get('loaded') : null;
     const studentClassInstanceLoaded = studentClassInstance ? studentClassInstance.get('loaded') : null;
 
     let currentClassStudents;
     if (studentsLoaded === true && studentClassInstanceLoaded === true) {
-      currentClassStudents = this.getCurrentClassStudents(students.get('data'), studentClassInstance.get('data'));
+      const studentsInJS = students.toJS();
+      const studentClassInstanceInJS = studentClassInstance.toJS();
+      currentClassStudents = this.getCurrentClassStudents(studentsInJS.data, studentClassInstanceInJS.data);
     }
 
     // Table dimensions
@@ -72,6 +75,7 @@ export class Attendance extends React.PureComponent { // eslint-disable-line rea
           currentClassStudents={currentClassStudents}
           nameWidth={nameWidth}
           attendanceWidth={attendanceWidth}
+          changeAttendance={onChangeStudentClassInstanceAttendance}
         />
       );
     }
@@ -97,6 +101,7 @@ Attendance.propTypes = {
   onLoadStudents: React.PropTypes.func,
   onLoadClassInstance: React.PropTypes.func,
   onLoadStudentClassInstance: React.PropTypes.func,
+  onChangeStudentClassInstanceAttendance: React.PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -112,6 +117,7 @@ export function mapDispatchToProps(dispatch) {
     onLoadStudents: () => dispatch(loadStudents()),
     onLoadClassInstance: () => dispatch(loadClassInstance()),
     onLoadStudentClassInstance: () => dispatch(loadStudentClassInstance()),
+    onChangeStudentClassInstanceAttendance: (id, attendance) => dispatch(changeStudentClassInstanceAttendance(id, attendance)),
   };
 }
 

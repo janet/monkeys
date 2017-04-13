@@ -11,6 +11,7 @@ import {
   loadStudentClassInstance,
   studentClassInstanceLoaded,
   studentClassInstanceLoadingError,
+  changeStudentClassInstanceAttendance,
 } from '../actions';
 
 import {
@@ -23,7 +24,10 @@ import {
   LOAD_STUDENT_CLASS_INSTANCE,
   LOAD_STUDENT_CLASS_INSTANCE_SUCCESS,
   LOAD_STUDENT_CLASS_INSTANCE_ERROR,
+  CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE,
 } from '../constants';
+
+import { tardyAttendance, studentClassInstanceId } from './fixtures';
 
 describe('Attendance actions', () => {
   describe('loadStudents', () => {
@@ -138,6 +142,18 @@ describe('Attendance actions', () => {
       };
 
       expect(studentClassInstanceLoadingError(fixture)).toEqual(expected);
+    });
+  });
+
+  describe('changeStudentClassInstanceAttendance', () => {
+    it('should return the correct type and the passed attendance and studentClassInstanceId', () => {
+      const expected = {
+        type: CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE,
+        attendance: tardyAttendance,
+        studentClassInstanceId,
+      };
+
+      expect(changeStudentClassInstanceAttendance(tardyAttendance, studentClassInstanceId)).toEqual(expected);
     });
   });
 });
