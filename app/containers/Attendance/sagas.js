@@ -7,7 +7,7 @@ import { call,
          take } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
-import { LOAD_STUDENTS, LOAD_CLASS_INSTANCE, LOAD_STUDENT_CLASS_INSTANCE } from './constants';
+import { LOAD_STUDENTS, LOAD_CLASS_INSTANCE, LOAD_STUDENT_CLASS_INSTANCE, CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE } from './constants';
 import { studentsLoaded, studentsLoadingError,
          classInstanceLoaded, classInstanceLoadingError,
          studentClassInstanceLoaded, studentClassInstanceLoadingError } from './actions';
@@ -89,9 +89,28 @@ export function* studentClassInstanceData() {
   yield cancel(watcher);
 }
 
+export function* updateStudentClassInstanceAttendance(action) {
+  const id = action.studentClassInstanceId;
+  const attendance = action.attendance;
+  const requestURL = `${STUDENT_CLASS_INSTANCE_URL}/${id}/${attendance}`;
+  yield call(request, requestURL);
+}
+
+export function* updateStudentClassInstanceAttendanceWatcher() {
+  yield fork(takeLatest, CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE, updateStudentClassInstanceAttendance);
+}
+
+export function* studentClassInstanceAttendanceData() {
+  const watcher = yield fork(updateStudentClassInstanceAttendanceWatcher);
+
+  yield take(LOCATION_CHANGE);
+  yield cancel(watcher);
+}
+
 // All sagas to be loaded
 export default [
   studentsData,
   classInstanceData,
   studentClassInstanceData,
+  studentClassInstanceAttendanceData,
 ];

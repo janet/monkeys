@@ -153,7 +153,7 @@ describe('Attendance actions', () => {
         studentClassInstanceId,
       };
 
-      expect(changeStudentClassInstanceAttendance(tardyAttendance, studentClassInstanceId)).toEqual(expected);
+      expect(changeStudentClassInstanceAttendance(studentClassInstanceId, tardyAttendance)).toEqual(expected);
     });
   });
 });

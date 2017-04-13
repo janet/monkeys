@@ -31,7 +31,7 @@ function AttendanceCell(props) {
 
   return (
     <Cell {...columnProps}>
-      <StyledAttendanceButton onClick={() => changeAttendance(attendanceChange[attendance], studentClassInstanceId)}>
+      <StyledAttendanceButton onClick={() => changeAttendance(studentClassInstanceId, attendanceChange[attendance])}>
         <i className={attendanceIcon[attendance]} />
       </StyledAttendanceButton>
     </Cell>
