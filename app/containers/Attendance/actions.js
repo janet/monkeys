@@ -82,11 +82,11 @@ export function studentClassInstanceLoadingError(error) {
   };
 }
 
-export function changeStudentClassInstanceAttendance(attendance, studentClassInstanceId) {
+export function changeStudentClassInstanceAttendance(studentClassInstanceId, attendance) {
   return {
     type: CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE,
-    attendance,
     studentClassInstanceId,
+    attendance,
   };
 }
 

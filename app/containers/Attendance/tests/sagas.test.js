@@ -13,8 +13,9 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { getStudents, getStudentsWatcher, studentsData, STUDENTS_URL,
          getClassInstance, getClassInstanceWatcher, classInstanceData, CLASS_INSTANCE_URL,
          getStudentClassInstance, getStudentClassInstanceWatcher,
-         studentClassInstanceData, STUDENT_CLASS_INSTANCE_URL } from '../sagas';
-import { LOAD_STUDENTS, LOAD_CLASS_INSTANCE, LOAD_STUDENT_CLASS_INSTANCE } from '../constants';
+         studentClassInstanceData, STUDENT_CLASS_INSTANCE_URL, updateStudentClassInstanceAttendance,
+         updateStudentClassInstanceAttendanceWatcher, studentClassInstanceAttendanceData } from '../sagas';
+import { LOAD_STUDENTS, LOAD_CLASS_INSTANCE, LOAD_STUDENT_CLASS_INSTANCE, CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE } from '../constants';
 import { studentsLoaded, studentsLoadingError,
          classInstanceLoaded, classInstanceLoadingError,
          studentClassInstanceLoaded, studentClassInstanceLoadingError } from '../actions';
@@ -208,3 +209,55 @@ describe('studentClassInstanceData Saga', () => {
     }
   );
 });
+
+describe('updateStudentClassInstanceAttendance Saga', () => {
+  let updateStudentClassInstanceAttendanceGenerator;
+
+  beforeEach(() => {
+    updateStudentClassInstanceAttendanceGenerator = updateStudentClassInstanceAttendance();
+
+    const action = {
+      type: CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE,
+      studentClassInstanceId: 1,
+      attendance: 'P',
+    };
+    const id = action.studentClassInstanceId;
+    const attendance = action.attendance;
+    const requestURL = `${STUDENT_CLASS_INSTANCE_URL}/${id}/${attendance}`;
+    const callDescriptor = updateStudentClassInstanceAttendanceGenerator.next().value;
+    expect(callDescriptor).toEqual(call(request, requestURL));
+  });
+});
+
+describe('updateStudentClassInstanceAttendanceWatcher Saga', () => {
+  const updateStudentClassInstanceAttendanceWatcherGenerator = updateStudentClassInstanceAttendanceWatcher();
+
+  it('should watch for the CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE action', () => {
+    const takeDescriptor = updateStudentClassInstanceAttendanceWatcherGenerator.next().value;
+    expect(takeDescriptor).toEqual(fork(takeLatest, CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE, updateStudentClassInstanceAttendance));
+  });
+});
+
+describe('studentClassInstanceAttendanceData Saga', () => {
+  const studentClassInstanceAttendanceDataSaga = studentClassInstanceAttendanceData();
+
+  let forkDescriptor;
+
+  it('should asyncronously fork updateStudentClassInstanceAttendanceWatcher saga', () => {
+    forkDescriptor = studentClassInstanceAttendanceDataSaga.next();
+    expect(forkDescriptor.value).toEqual(fork(updateStudentClassInstanceAttendanceWatcher));
+  });
+
+  it('should yield until LOCATION_CHANGE action', () => {
+    const takeDescriptor = studentClassInstanceAttendanceDataSaga.next();
+    expect(takeDescriptor.value).toEqual(take(LOCATION_CHANGE));
+  });
+
+  it('should finally cancel() the forked updateStudentClassInstanceAttendanceWatcher saga',
+    function* studentClassInstanceAttendanceDataSagaCancellable() {
+      forkDescriptor = studentClassInstanceAttendanceDataSaga.next(put(LOCATION_CHANGE));
+      expect(forkDescriptor.value).toEqual(cancel(forkDescriptor));
+    }
+  );
+});
+

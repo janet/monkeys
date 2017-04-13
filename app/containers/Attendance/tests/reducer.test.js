@@ -112,6 +112,6 @@ describe('attendanceReducer', () => {
       .mergeIn(['studentClassInstance', 'data'], studentClassInstance);
     const expected = startingState
       .setIn(['studentClassInstance', 'data', studentClassInstanceIndex, 'attendance'], attendance);
-    expect(attendanceReducer(startingState, changeStudentClassInstanceAttendance(attendance, id))).toEqual(expected);
+    expect(attendanceReducer(startingState, changeStudentClassInstanceAttendance(id, attendance))).toEqual(expected);
   });
 });
