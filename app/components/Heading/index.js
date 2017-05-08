@@ -8,6 +8,7 @@ import React, { PropTypes } from 'react';
 
 import Button from 'components/Button';
 import Item from './Item';
+import SpaceBetweenWrapper from './SpaceBetweenWrapper';
 
 function Heading(props) {
   const { level,
@@ -17,10 +18,12 @@ function Heading(props) {
 
   return (
     <Item level={level}>
-      {item}
-      {icon ?
-        <Button icon={icon} href={href} /> :
-        null}
+      <SpaceBetweenWrapper>
+        {item}
+        {icon ?
+          <Button icon={icon} href={href} /> :
+          null}
+      </SpaceBetweenWrapper>
     </Item>
   );
 }

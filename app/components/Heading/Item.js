@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react';
 import styled, { css } from 'styled-components';
 
 const styles = css`
-  text-align: center;
+  display: flex;
+  justify-content: center;
 `;
 
 const Item = styled(({ level, children, ...props }) => { // eslint-disable-line arrow-body-style
