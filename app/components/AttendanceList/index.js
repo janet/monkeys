@@ -8,7 +8,7 @@ import React, { PropTypes } from 'react';
 import { Table, Column, Cell } from 'fixed-data-table-2';
 
 import AttendanceCell from 'components/AttendanceCell';
-import CenteredWrapper from './CenteredWrapper';
+import CenteredWrapper from 'components/Wrappers/CenteredWrapper';
 
 function AttendanceList(props) {
   const {
