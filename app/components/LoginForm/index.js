@@ -7,31 +7,48 @@
 import React, { PropTypes } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import { reduxForm, Field } from 'redux-form/immutable';
 
 import CenteredWrapper from 'components/Wrappers/CenteredWrapper';
 
 function LoginForm(props) {
   const {
-    tryLogin,
+    handleSubmit,
+    pristine,
+    submitting,
   } = props;
 
+  console.log('pristine', pristine);
   return (
     <CenteredWrapper>
-      <form onSubmit={tryLogin}>
+      <form onSubmit={handleSubmit}>
         <div>
-          <TextField
-            hintText="person@example.com"
-            floatingLabelText="Email"
+          <Field
+            name="email"
+            component={(email) =>
+              <TextField
+                hintText="person@example.com"
+                floatingLabelText="Email"
+                {...email.input}
+              />
+            }
           />
         </div>
         <div>
-          <TextField
-            floatingLabelText="Password"
-            type="password"
+          <Field
+            name="password"
+            component={(password) =>
+              <TextField
+                type="password"
+                hintText="password"
+                floatingLabelText="Password"
+                {...password.input}
+              />
+            }
           />
         </div>
         <div>
-          <RaisedButton type="submit" label="Log In" primary />
+          <RaisedButton type="submit" disabled={pristine || submitting} label="Log In" primary />
         </div>
       </form>
     </CenteredWrapper>
@@ -39,8 +56,12 @@ function LoginForm(props) {
 }
 
 LoginForm.propTypes = {
-  tryLogin: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
 };
 
 
-export default LoginForm;
+export default reduxForm({
+  form: 'LoginForm',
+})(LoginForm);
