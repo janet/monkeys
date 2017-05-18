@@ -68,7 +68,7 @@ describe('studentClassScheduleData Saga', () => {
 
   let forkDescriptor;
 
-  it('should asyncronously fork getStudentClassScheduleWatcher saga', () => {
+  it('should asynchronously fork getStudentClassScheduleWatcher saga', () => {
     forkDescriptor = studentClassScheduleDataSaga.next();
     expect(forkDescriptor.value).toEqual(fork(getStudentClassScheduleWatcher));
   });
@@ -124,7 +124,7 @@ describe('classScheduleData Saga', () => {
 
   let forkDescriptor;
 
-  it('should asyncronously fork getClassScheduleWatcher saga', () => {
+  it('should asynchronously fork getClassScheduleWatcher saga', () => {
     forkDescriptor = classScheduleDataSaga.next();
     expect(forkDescriptor.value).toEqual(fork(getClassScheduleWatcher));
   });
@@ -182,7 +182,7 @@ describe('studentsData Saga', () => {
 
   let forkDescriptor;
 
-  it('should asyncronously fork getStudentsWatcher saga', () => {
+  it('should asynchronously fork getStudentsWatcher saga', () => {
     forkDescriptor = studentsDataSaga.next();
     expect(forkDescriptor.value).toEqual(fork(getStudentsWatcher));
   });
@@ -241,7 +241,7 @@ describe('classInstanceData Saga', () => {
 
   let forkDescriptor;
 
-  it('should asyncronously fork getClassInstanceWatcher saga', () => {
+  it('should asynchronously fork getClassInstanceWatcher saga', () => {
     forkDescriptor = classInstanceDataSaga.next();
     expect(forkDescriptor.value).toEqual(fork(getClassInstanceWatcher));
   });
@@ -310,7 +310,7 @@ describe('studentClassInstanceData Saga', () => {
 
   let forkDescriptor;
 
-  it('should asyncronously fork the getStudentClassInstanceWatcher saga', () => {
+  it('should asynchronously fork the getStudentClassInstanceWatcher saga', () => {
     forkDescriptor = studentClassInstanceDataSaga.next();
     expect(forkDescriptor.value).toEqual(fork(getStudentClassInstanceWatcher));
   });
@@ -331,14 +331,14 @@ describe('studentClassInstanceData Saga', () => {
 describe('updateStudentClassInstanceAttendance Saga', () => {
   let updateStudentClassInstanceAttendanceGenerator;
 
-  beforeEach(() => {
-    updateStudentClassInstanceAttendanceGenerator = updateStudentClassInstanceAttendance();
-
+  it('should return the studentClassInstance if it requests the attendance update successfully', () => {
     const action = {
       type: CHANGE_STUDENT_CLASS_INSTANCE_ATTENDANCE,
       studentClassInstanceId: 1,
       attendance: 'P',
     };
+    updateStudentClassInstanceAttendanceGenerator = updateStudentClassInstanceAttendance(action);
+
     const id = action.studentClassInstanceId;
     const attendance = action.attendance;
     const requestURL = `${STUDENT_CLASS_INSTANCE_URL}/${id}/${attendance}`;
@@ -361,7 +361,7 @@ describe('studentClassInstanceAttendanceData Saga', () => {
 
   let forkDescriptor;
 
-  it('should asyncronously fork updateStudentClassInstanceAttendanceWatcher saga', () => {
+  it('should asynchronously fork updateStudentClassInstanceAttendanceWatcher saga', () => {
     forkDescriptor = studentClassInstanceAttendanceDataSaga.next();
     expect(forkDescriptor.value).toEqual(fork(updateStudentClassInstanceAttendanceWatcher));
   });
