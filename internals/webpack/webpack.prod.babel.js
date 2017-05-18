@@ -24,8 +24,10 @@ module.exports = require('./webpack.base.babel')({
       async: true,
     }),
 
-    // Merge all duplicate modules
-    new webpack.optimize.DedupePlugin(),
+    // remove DedupePlugin in prod
+    // https://github.com/react-boilerplate/react-boilerplate/issues/1210
+    // // Merge all duplicate modules
+    // new webpack.optimize.DedupePlugin(),
 
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
