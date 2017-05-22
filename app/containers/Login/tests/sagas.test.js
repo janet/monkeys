@@ -3,86 +3,99 @@
  */
 
 import expect from 'expect';
-import { takeLatest } from 'redux-saga';
 import { call,
-         cancel,
-         fork,
          put,
-         take } from 'redux-saga/effects';
+         take,
+         fork,
+         cancel,
+         race } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import genSalt from '../salt';
+import { hashSync } from 'bcryptjs';
 
-import { PROCESS_LOGIN } from '../constants';
-import { loginProcessed, processingLoginError } from '../actions';
-import { sendLoginInfo, sendLoginInfoWatcher, loginInfoData, PROCESS_LOGIN_URL } from '../sagas';
-import request from 'utils/request';
-import { email, inputs } from './fixtures';
+import { AUTHORIZE } from '../constants';
+import { authorizedSuccess, authorizingError } from '../actions';
+import { processAuthorization, loginFlow,
+        loginFlowWatcher, loginFlowData } from '../sagas';
+import { email, password, data } from 'tests/fixtures';
+import authorize from '../authorize';
 
-describe('sendLoginInfo Saga', () => {
-  let sendLoginInfoGenerator;
+
+describe('loginFlow Saga', () => {
+  const loginFlowGenerator = loginFlow();
+
+  it('should watch for AUTHORIZE action', () => {
+    const takeDescriptor = loginFlowGenerator.next().value;
+    expect(takeDescriptor).toEqual(take(AUTHORIZE));
+  });
+
+  it('should start a race condition with authorize and logout', () => {
+    const authorizeResultMock = {
+      type: AUTHORIZE,
+      data,
+    };
+    const raceDescriptor = loginFlowGenerator.next(authorizeResultMock).value;
+    expect(raceDescriptor).toEqual(race(
+      {
+        authorize: call(processAuthorization, { email, password }),
+        // logout: take(LOGOUT),
+      })
+    );
+  });
+
+  it('should dispatch the authorizedSuccess action if authorization succeeds', () => {
+    const authorizeWinner = { authorize: true };
+    const putDescriptor = loginFlowGenerator.next(authorizeWinner).value;
+    expect(putDescriptor).toEqual(put(authorizedSuccess(true)));
+  });
+});
+
+describe('processAuthorization Saga', () => {
+  let processAuthorizationGenerator;
 
   beforeEach(() => {
-    const action = {
-      type: PROCESS_LOGIN,
-      inputs,
-    };
-    sendLoginInfoGenerator = sendLoginInfo(action);
+    processAuthorizationGenerator = processAuthorization({ email, password });
+    const salt = genSalt(email);
+    const hash = hashSync(password, salt);
+    const callDescriptor = processAuthorizationGenerator.next().value;
+    expect(callDescriptor).toEqual(call(authorize.login, email, hash));
+  });
 
-    const requestURL = PROCESS_LOGIN_URL;
-    const callDescriptor = sendLoginInfoGenerator.next().value;
-    expect(callDescriptor).toEqual(call(
-      request,
-      requestURL,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-        }),
-      }
-    ));
-  });
-  it('should dispatch the loginProcessed action when login succeeds', () => {
-    const response = email;
-    const putDescriptor = sendLoginInfoGenerator.next(response).value;
-    expect(putDescriptor).toEqual(put(loginProcessed(response)));
-  });
-  it('should call the processingLoginError action if the response errors', () => {
-    const response = new Error('Some Error');
-    const putDescriptor = sendLoginInfoGenerator.throw(response).value;
-    expect(putDescriptor).toEqual(put(processingLoginError(response)));
+  it('should call the authorizingError action if the authorization response errors', () => {
+    const response = new Error('i am error');
+    const putDescriptor = processAuthorizationGenerator.throw(response).value;
+    expect(putDescriptor).toEqual(put(authorizingError(response)));
   });
 });
 
-describe('sendLoginInfoWatcher Saga', () => {
-  const sendLoginInfoWatcherGenerator = sendLoginInfoWatcher();
+describe('loginFlowWatcher Saga', () => {
+  const loginFlowWatcherGenerator = loginFlowWatcher();
 
-  it('should watch for the PROCESS_LOGIN action', () => {
-    const takeDescriptor = sendLoginInfoWatcherGenerator.next().value;
-    expect(takeDescriptor).toEqual(fork(takeLatest, PROCESS_LOGIN, sendLoginInfo));
+  it('should asynchronously fork loginFlow Saga', () => {
+    const forkDescriptor = loginFlowWatcherGenerator.next().value;
+    expect(forkDescriptor).toEqual(fork(loginFlow));
   });
 });
 
-describe('loginInfoData Saga', () => {
-  const loginInfoDataSaga = loginInfoData();
+describe('loginFlowData Saga', () => {
+  const loginFlowDataSaga = loginFlowData();
 
   let forkDescriptor;
 
-  it('should asynchronously fork the sendLoginInfoWatcher saga', () => {
-    forkDescriptor = loginInfoDataSaga.next();
-    expect(forkDescriptor.value).toEqual(fork(sendLoginInfoWatcher));
+  it('should asynchronously fork loginFlowWatcher saga', () => {
+    forkDescriptor = loginFlowDataSaga.next().value;
+    expect(forkDescriptor).toEqual(fork(loginFlowWatcher));
   });
 
   it('should yield until LOCATION_CHANGE action', () => {
-    const takeDescriptor = loginInfoDataSaga.next();
-    expect(takeDescriptor.value).toEqual(take(LOCATION_CHANGE));
+    const takeDescriptor = loginFlowDataSaga.next().value;
+    expect(takeDescriptor).toEqual(take(LOCATION_CHANGE));
   });
 
-  it('should finally cancel the forked sendLoginInfoWatcher saga',
-    function* loginInfoDataSagaCancellable() {
-      forkDescriptor = loginInfoDataSaga.next(put(LOCATION_CHANGE));
-      expect(forkDescriptor.value).toEqual(cancel(forkDescriptor));
+  it('should finally cancel the forked loginFlowWatcher saga',
+    function* loginFlowDataSagaCancellable() {
+      forkDescriptor = loginFlowDataSaga.next(put(LOCATION_CHANGE)).value;
+      expect(forkDescriptor).toEqual(cancel(forkDescriptor));
     }
   );
 });

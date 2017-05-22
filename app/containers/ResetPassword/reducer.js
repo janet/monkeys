@@ -1,14 +1,14 @@
 /*
  *
- * Login reducer
+ * ResetPassword reducer
  *
  */
 
 import { fromJS } from 'immutable';
 import {
-  AUTHORIZE,
-  AUTHORIZE_SUCCESS,
-  AUTHORIZE_ERROR,
+  RESET_PASSWORD,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_ERROR,
 } from './constants';
 
 export const initialState = fromJS({
@@ -16,14 +16,13 @@ export const initialState = fromJS({
   error: false,
 });
 
-function loginReducer(state = initialState, action) {
+function resetPasswordReducer(state = initialState, action) {
   switch (action.type) {
-    case AUTHORIZE:
+    case RESET_PASSWORD:
       return state;
-    case AUTHORIZE_SUCCESS:
-      return state
-        .set('isAuthorized', action.isAuthorized);
-    case AUTHORIZE_ERROR:
+    case RESET_PASSWORD_SUCCESS:
+      return state;
+    case RESET_PASSWORD_ERROR:
       return state
         .set('error', action.error);
     default:
@@ -31,4 +30,4 @@ function loginReducer(state = initialState, action) {
   }
 }
 
-export default loginReducer;
+export default resetPasswordReducer;

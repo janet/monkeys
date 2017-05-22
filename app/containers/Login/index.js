@@ -7,20 +7,22 @@
 import React, { PropTypes } from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-
-import { processLogin } from './actions';
+import { push } from 'react-router-redux';
+import { authorize } from './actions';
 import LoginForm from 'components/LoginForm';
-import { selectEmail } from './selectors';
+import { selectIsAuthorized } from './selectors';
 
 export class Login extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     const {
       tryLogin,
+      resetPasswordRedirect,
     } = this.props;
     return (
       <div>
         <LoginForm
           onSubmit={tryLogin}
+          resetPasswordRedirect={resetPasswordRedirect}
         />
       </div>
     );
@@ -28,17 +30,18 @@ export class Login extends React.PureComponent { // eslint-disable-line react/pr
 }
 
 Login.propTypes = {
-  // email: PropTypes.string,
-  tryLogin: PropTypes.func,
+  tryLogin: PropTypes.func.isRequired,
+  resetPasswordRedirect: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  email: selectEmail(),
+  isAuthorized: selectIsAuthorized(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    tryLogin: (inputs) => dispatch(processLogin(inputs)),
+    tryLogin: (data) => dispatch(authorize(data)),
+    resetPasswordRedirect: () => dispatch(push('/reset_password')),
   };
 }
 

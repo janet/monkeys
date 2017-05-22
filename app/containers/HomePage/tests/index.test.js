@@ -12,7 +12,7 @@ import { HomePage,
 import { loadStudentClassSchedule, loadClassSchedule, loadStudents,
          loadClassInstance, loadStudentClassInstance,
          changeStudentClassInstanceAttendance } from '../actions';
-import { students, studentClassInstance } from './fixtures';
+import { students, studentClassInstance } from 'tests/fixtures';
 import AttendanceList from 'components/AttendanceList';
 
 describe('<HomePage />', () => {

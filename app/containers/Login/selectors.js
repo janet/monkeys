@@ -9,12 +9,18 @@ const selectLogin = () => (state) => state.get('login');
  * Other specific selectors
  */
 
-const selectEmail = () => createSelector(
+const selectIsAuthorized = () => createSelector(
   selectLogin(),
-  (loginState) => loginState.get('email')
+  (loginState) => loginState.get('isAuthorized')
+);
+
+const selectError = () => createSelector(
+  selectLogin(),
+  (loginState) => loginState.get('error')
 );
 
 export {
   selectLogin,
-  selectEmail,
+  selectIsAuthorized,
+  selectError,
 };

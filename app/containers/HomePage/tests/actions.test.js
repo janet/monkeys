@@ -39,7 +39,7 @@ import {
   changeStudentClassInstanceAttendance,
 } from '../actions';
 
-import { tardyAttendance, studentClassInstanceId } from './fixtures';
+import { tardyAttendance, studentClassInstanceId } from 'tests/fixtures';
 
 describe('homePage Actions', () => {
   describe('loadStudentClassSchedule', () => {

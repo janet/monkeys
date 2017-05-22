@@ -21,7 +21,8 @@ import {
   changeStudentClassInstanceAttendance,
 } from '../actions';
 
-import { students, classInstance, studentClassInstance, errorMessage } from './fixtures';
+import { students, classInstance,
+         studentClassInstance, errorMessage } from 'tests/fixtures';
 
 
 describe('homePageReducer', () => {

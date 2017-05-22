@@ -2,14 +2,13 @@ import expect from 'expect';
 
 import loginReducer, { initialState } from '../reducer';
 import {
-  processLogin,
-  loginProcessed,
-  processingLoginError,
+  authorize,
+  authorizedSuccess,
+  authorizingError,
 } from '../actions';
 import {
-  email,
   errorMessage,
-} from './fixtures';
+} from 'tests/fixtures';
 
 describe('loginReducer', () => {
   let state;
@@ -22,30 +21,30 @@ describe('loginReducer', () => {
     expect(loginReducer(undefined, {})).toEqual(expected);
   });
 
-  it('should handle the processLogin action correctly', () => {
+  it('should handle the authorize action correctly', () => {
     const expected = state;
 
-    expect(loginReducer(state, processLogin())).toEqual(expected);
+    expect(loginReducer(state, authorize())).toEqual(expected);
   });
 
-  it('should handle the loginProcessed action correctly when given a success email', () => {
+  it('should handle the authorizedSuccess action correctly when authorization succeeds', () => {
     const expected = state
-      .set('email', email);
+      .set('isAuthorized', true);
 
-    expect(loginReducer(state, loginProcessed({ success: email }))).toEqual(expected);
+    expect(loginReducer(state, authorizedSuccess(true))).toEqual(expected);
   });
 
-  it('should handle the loginProcessed action correctly when given an expected error from the server', () => {
+  it('should handle the authorizedSuccess action correctly when given an expected error from the server', () => {
     const serverError = { error: errorMessage };
     const expected = state
       .set('error', errorMessage);
-    expect(loginReducer(state, loginProcessed(serverError))).toEqual(expected);
+    expect(loginReducer(state, authorizedSuccess(serverError))).toEqual(expected);
   });
 
-  it('should handle the processingLoginError action correctly', () => {
+  it('should handle the authorizingError action correctly', () => {
     const expected = state
       .set('error', errorMessage);
 
-    expect(loginReducer(state, processingLoginError(errorMessage))).toEqual(expected);
+    expect(loginReducer(state, authorizingError(errorMessage))).toEqual(expected);
   });
 });

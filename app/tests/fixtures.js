@@ -67,3 +67,31 @@ export const currentClass = 1;
 export const tardyAttendance = 'T';
 
 export const studentClassInstanceId = 1;
+
+export const email = 'janet@example.com';
+
+export const password = 'something';
+
+export const data = fromJS({
+  email,
+  password,
+});
+
+export const isAuthorized = true;
+
+export const EMPTY_FUNCTION = () => {};
+
+export const fakeInput = {
+  name: 'email',
+  onBlur: EMPTY_FUNCTION,
+  onChange: EMPTY_FUNCTION,
+  onDragStart: EMPTY_FUNCTION,
+  onDrop: EMPTY_FUNCTION,
+  onFocus: EMPTY_FUNCTION,
+  value: '',
+};
+
+export const meta = {
+  touched: false,
+  error: false,
+};
