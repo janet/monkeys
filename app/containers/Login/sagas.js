@@ -1,49 +1,70 @@
-import { takeLatest } from 'redux-saga';
 import { call,
          cancel,
          fork,
          put,
-         take } from 'redux-saga/effects';
+         take,
+         race } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { browserHistory } from 'react-router';
 
-import { PROCESS_LOGIN } from './constants';
-import { loginProcessed, processingLoginError } from './actions';
-import request from 'utils/request';
+import { AUTHORIZE } from './constants';
+import { authorizedSuccess, authorizingError } from './actions';
+import authorize from './authorize';
+import genSalt from './salt';
+import { hashSync } from 'bcryptjs';
 
-
-export const PROCESS_LOGIN_URL = 'api/process_login';
-export function* sendLoginInfo(action) {
-  const inputs = action.inputs;
-  const email = inputs.get('email');
-  // const password = inputs.get('password');
-  const requestURL = PROCESS_LOGIN_URL;
-
+export function* processAuthorization({ email, password, isRegistering = false, isResettingPassword = false }) {
   try {
-    const processLoginResult = yield call(
-      request,
-      requestURL,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-        }),
-      }
-    );
-    yield put(loginProcessed(processLoginResult));
+    const salt = genSalt(email);
+    const hash = hashSync(password, salt);
+
+    let authorizeResult;
+    if (isRegistering) {
+      authorizeResult = yield call(authorize.register, email, hash);
+    } else if (isResettingPassword) {
+      authorizeResult = yield call(authorize.resetPassword, email, hash);
+    } else {
+      authorizeResult = yield call(authorize.login, email, hash);
+    }
+
+    return authorizeResult;
   } catch (err) {
-    yield put(processingLoginError(err));
+    yield put(authorizingError(err));
+    return false;
   }
 }
 
-export function* sendLoginInfoWatcher() {
-  yield fork(takeLatest, PROCESS_LOGIN, sendLoginInfo);
+/**
+ * Log in saga
+ */
+export function* loginFlow() {
+  // Because sagas are generators, doing `while (true)` doesn't block our program
+  // Basically here we say "this saga is always listening for actions"
+  while (true) {
+    // And we're listening for `AUTHORIZE` actions and destructuring its payload
+    const authorizeResult = yield take(AUTHORIZE);
+    const data = authorizeResult.data;
+    const email = data.get('email');
+    const password = data.get('password');
+
+    const winner = yield race({
+      authorize: call(processAuthorization, { email, password }),
+      // logout: take(LOGOUT),
+    });
+
+    if (winner.authorize) {
+      yield put(authorizedSuccess(winner.authorize));
+      browserHistory.push('/');
+    }
+  }
 }
 
-export function* loginInfoData() {
-  const watcher = yield fork(sendLoginInfoWatcher);
+export function* loginFlowWatcher() {
+  yield fork(loginFlow);
+}
+
+export function* loginFlowData() {
+  const watcher = yield fork(loginFlowWatcher);
 
   yield take(LOCATION_CHANGE);
   yield cancel(watcher);
@@ -51,5 +72,5 @@ export function* loginInfoData() {
 
 // All sagas to be loaded
 export default [
-  loginInfoData,
+  loginFlowData,
 ];

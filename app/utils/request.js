@@ -8,6 +8,11 @@ import 'whatwg-fetch';
  * @return {object}          The parsed JSON from the request
  */
 function parseJSON(response) {
+  // for testing purposes, allow for a Response-like object to return
+  if (process.env.NODE_ENV === 'test') {
+    return response.body;
+  }
+
   return response.json();
 }
 
@@ -37,7 +42,7 @@ function checkStatus(response) {
  * @return {object}           The response data
  */
 export default function request(url, options) {
-  return fetch(url, options)
+  return fetch(url, { ...options, credentials: 'include' })
     .then(checkStatus)
     .then(parseJSON);
 }

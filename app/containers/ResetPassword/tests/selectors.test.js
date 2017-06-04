@@ -1,21 +1,20 @@
 import { fromJS } from 'immutable';
 import expect from 'expect';
 
-import {
-  selectLogin,
-  selectIsAuthorized,
-  selectError } from '../selectors';
+import { selectResetPassword,
+         selectIsAuthorized,
+         selectError } from '../selectors';
 import { initialState } from '../reducer';
 import { errorMessage, isAuthorized } from 'tests/fixtures';
 
 
-describe('selectLogin', () => {
-  const loginSelector = selectLogin();
-  it('should select the login state', () => {
+describe('selectResetPassword', () => {
+  const resetPasswordSelector = selectResetPassword();
+  it('should select the resetPassword state', () => {
     const mockedState = fromJS({
-      login: initialState,
+      resetPassword: initialState,
     });
-    expect(loginSelector(mockedState)).toEqual(initialState);
+    expect(resetPasswordSelector(mockedState)).toEqual(initialState);
   });
 });
 
@@ -23,7 +22,7 @@ describe('selectIsAuthorized', () => {
   const isAuthorizedSelector = selectIsAuthorized();
   it('should select isAuthorized', () => {
     const mockedState = fromJS({
-      login: {
+      resetPassword: {
         isAuthorized,
       },
     });
@@ -35,7 +34,7 @@ describe('selectError', () => {
   const errorSelector = selectError();
   it('should select the error', () => {
     const mockedState = fromJS({
-      login: {
+      resetPassword: {
         error: errorMessage.msg,
       },
     });

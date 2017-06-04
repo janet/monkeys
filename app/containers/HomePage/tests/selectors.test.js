@@ -11,7 +11,8 @@ import {
   selectStudentClassInstance,
 } from '../selectors';
 
-import { students, classInstance, studentClassInstance, currentClass } from './fixtures';
+import { students, classInstance,
+         studentClassInstance, currentClass } from 'tests/fixtures';
 
 
 // HomePage

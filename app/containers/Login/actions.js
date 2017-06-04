@@ -5,34 +5,40 @@
  */
 
 import {
-  PROCESS_LOGIN,
-  PROCESS_LOGIN_SUCCESS,
-  PROCESS_LOGIN_ERROR,
+  AUTHORIZE,
+  AUTHORIZE_SUCCESS,
+  AUTHORIZE_ERROR,
 } from './constants';
 
-export function processLogin(inputs) {
+export function authorize(data) {
   return {
-    type: PROCESS_LOGIN,
-    inputs,
+    type: AUTHORIZE,
+    data,
   };
 }
 
-export function loginProcessed(response) {
-  if (response.success) {
+
+export function authorizedSuccess(response) {
+  if (response.error) {
     return {
-      type: PROCESS_LOGIN_SUCCESS,
-      email: response.success,
+      type: AUTHORIZE_ERROR,
+      error: response.error,
+    };
+  } else if (response) {
+    return {
+      type: AUTHORIZE_SUCCESS,
+      isAuthorized: response,
     };
   }
   return {
-    type: PROCESS_LOGIN_ERROR,
-    error: response.error,
+    type: AUTHORIZE_ERROR,
+    error: response,
   };
 }
 
-export function processingLoginError(error) {
+export function authorizingError(error) {
   return {
-    type: PROCESS_LOGIN_ERROR,
+    type: AUTHORIZE_ERROR,
     error,
   };
 }

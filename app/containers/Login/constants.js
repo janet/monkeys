@@ -4,6 +4,7 @@
  *
  */
 
-export const PROCESS_LOGIN = 'app/Login/PROCESS_LOGIN';
-export const PROCESS_LOGIN_SUCCESS = 'app/Login/PROCESS_LOGIN_SUCCESS';
-export const PROCESS_LOGIN_ERROR = 'app/Login/PROCESS_LOGIN_ERROR';
+export const AUTHORIZE = 'app/Login/AUTHORIZE';
+export const AUTHORIZE_SUCCESS = 'app/Login/AUTHORIZE_SUCCESS';
+export const AUTHORIZE_ERROR = 'app/Login/AUTHORIZE_ERROR';
+

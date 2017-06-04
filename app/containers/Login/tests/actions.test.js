@@ -1,50 +1,58 @@
 import expect from 'expect';
 import {
-  processLogin,
-  loginProcessed,
-  processingLoginError,
+  authorize,
+  authorizedSuccess,
+  authorizingError,
 } from '../actions';
 import {
-  PROCESS_LOGIN,
-  PROCESS_LOGIN_SUCCESS,
-  PROCESS_LOGIN_ERROR,
+  AUTHORIZE,
+  AUTHORIZE_SUCCESS,
+  AUTHORIZE_ERROR,
 } from '../constants';
 import {
-  email,
   errorMessage,
-  inputs,
-} from './fixtures';
+  data,
+} from 'tests/fixtures';
 
 describe('Login actions', () => {
-  describe('processLogin', () => {
+  describe('authorize', () => {
     it('should return the correct type', () => {
       const expected = {
-        type: PROCESS_LOGIN,
-        inputs,
+        type: AUTHORIZE,
+        data,
       };
-      expect(processLogin(inputs)).toEqual(expected);
+      expect(authorize(data)).toEqual(expected);
     });
   });
 
-  describe('loginProcessed', () => {
+  describe('authorizedSuccess', () => {
     it('should return the correct type and the passed email', () => {
       const expected = {
-        type: PROCESS_LOGIN_SUCCESS,
-        email,
+        type: AUTHORIZE_SUCCESS,
+        isAuthorized: true,
       };
 
-      expect(loginProcessed({ success: email })).toEqual(expected);
+      expect(authorizedSuccess(true)).toEqual(expected);
     });
-  });
 
-  describe('processingLoginError', () => {
-    it('should return the correct type and the error', () => {
+    it('should error when the server cannot find the email', () => {
       const expected = {
-        type: PROCESS_LOGIN_ERROR,
+        type: AUTHORIZE_ERROR,
         error: errorMessage,
       };
 
-      expect(processingLoginError(errorMessage)).toEqual(expected);
+      expect(authorizedSuccess({ error: errorMessage })).toEqual(expected);
+    });
+  });
+
+  describe('authorizingError', () => {
+    it('should return the correct type and the error', () => {
+      const expected = {
+        type: AUTHORIZE_ERROR,
+        error: errorMessage,
+      };
+
+      expect(authorizingError(errorMessage)).toEqual(expected);
     });
   });
 });
