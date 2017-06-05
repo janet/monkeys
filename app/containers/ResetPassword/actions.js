@@ -3,6 +3,7 @@
  * ResetPassword actions
  *
  */
+import { fromJS } from 'immutable';
 
 import {
   RESET_PASSWORD,
@@ -12,6 +13,15 @@ import {
 
 
 export function resetPassword(data) {
+  if (data) {
+    return {
+      type: RESET_PASSWORD,
+      data: fromJS({
+        email: data.get('email').toLowerCase(),
+        password: data.get('password'),
+      }),
+    };
+  }
   return {
     type: RESET_PASSWORD,
     data,

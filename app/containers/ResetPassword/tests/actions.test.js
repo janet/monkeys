@@ -12,17 +12,22 @@ import {
 import {
   errorMessage,
   data,
+  dataUpperCaseEmail,
 } from 'tests/fixtures';
 
 
 describe('ResetPassword actions', () => {
   describe('resetPassword', () => {
+    const expected = {
+      type: RESET_PASSWORD,
+      data,
+    };
     it('should return the correct type', () => {
-      const expected = {
-        type: RESET_PASSWORD,
-        data,
-      };
       expect(resetPassword(data)).toEqual(expected);
+    });
+
+    it('should lowercase the email if necessary', () => {
+      expect(resetPassword(dataUpperCaseEmail)).toEqual(expected);
     });
   });
 

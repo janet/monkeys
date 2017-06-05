@@ -69,11 +69,17 @@ export const tardyAttendance = 'T';
 export const studentClassInstanceId = 1;
 
 export const email = 'janet@example.com';
+export const emailUpperCase = 'Janet@example.com';
 
 export const password = 'something';
 
 export const data = fromJS({
   email,
+  password,
+});
+
+export const dataUpperCaseEmail = fromJS({
+  email: emailUpperCase,
   password,
 });
 
