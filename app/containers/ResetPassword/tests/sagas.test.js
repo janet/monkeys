@@ -9,6 +9,7 @@ import { call,
          fork,
          cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { browserHistory } from 'react-router';
 
 import { RESET_PASSWORD } from '../constants';
 import { resetPasswordSuccess } from '../actions';
@@ -40,7 +41,12 @@ describe('resetPasswordFlow Saga', () => {
   it('should dispatch the resetPasswordSuccess action if authorization succeeds', () => {
     const wasSuccessful = true;
     const putDescriptor = resetPasswordFlowGenerator.next(wasSuccessful).value;
-    expect(putDescriptor).toEqual(put(resetPasswordSuccess(true)));
+    expect(putDescriptor).toEqual(put(resetPasswordSuccess(wasSuccessful)));
+  });
+
+  it('should reroute to /login when authorization succeeds', () => {
+    const callDescriptor = resetPasswordFlowGenerator.next().value;
+    expect(callDescriptor).toEqual(call(browserHistory.push, '/login'));
   });
 });
 

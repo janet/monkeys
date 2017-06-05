@@ -49,14 +49,8 @@ const history = syncHistoryWithStore(browserHistory, store, {
   selectLocationState: selectLocationState(),
 });
 
-// Set up the router, wrapping all Routes in the App component
-import App from 'containers/App';
+// Import routes
 import createRoutes from './routes';
-const rootRoute = {
-  component: App,
-  childRoutes: createRoutes(store),
-};
-
 
 const render = (translatedMessages) => {
   ReactDOM.render(
@@ -65,7 +59,7 @@ const render = (translatedMessages) => {
         <LanguageProvider messages={translatedMessages}>
           <Router
             history={history}
-            routes={rootRoute}
+            routes={createRoutes(store)}
             render={
               // Scroll to top when going to a new page, imitating default browser
               // behaviour

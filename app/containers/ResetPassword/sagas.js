@@ -27,7 +27,7 @@ export function* resetPasswordFlow() {
 
     if (wasSuccessful) {
       yield put(resetPasswordSuccess(wasSuccessful));
-      browserHistory.push('/login');
+      yield call(browserHistory.push, '/login');
     }
   }
 }

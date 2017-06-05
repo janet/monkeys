@@ -46,11 +46,15 @@ const authorize = {
   * Logs the current user out
   */
   logout() {
-    request('api/logout',
+    return request(
+      'api/logout',
       {
         method: 'POST',
       }
-    ).then(() => {
+    ).then((response) => {
+      if (response.error) {
+        return Promise.reject(response.error);
+      }
       localStorage.clear();
       return Promise.resolve(true);
     });

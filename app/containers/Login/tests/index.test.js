@@ -11,7 +11,7 @@ describe('<Login />', () => {
     const wrapper = shallow(
       <Login
         tryLogin={EMPTY_FUNCTION}
-        resetPasswordRedirct={EMPTY_FUNCTION}
+        resetPasswordRedirect={EMPTY_FUNCTION}
       />
     );
     const loginFormComponent = wrapper.find(LoginForm);

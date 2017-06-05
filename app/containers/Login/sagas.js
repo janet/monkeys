@@ -54,7 +54,7 @@ export function* loginFlow() {
 
     if (winner.authorize) {
       yield put(authorizedSuccess(winner.authorize));
-      browserHistory.push('/');
+      yield call(browserHistory.push, '/');
     }
   }
 }
