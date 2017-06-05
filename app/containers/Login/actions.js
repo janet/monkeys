@@ -3,6 +3,7 @@
  * Login actions
  *
  */
+import { fromJS } from 'immutable';
 
 import {
   AUTHORIZE,
@@ -11,6 +12,15 @@ import {
 } from './constants';
 
 export function authorize(data) {
+  if (data) {
+    return {
+      type: AUTHORIZE,
+      data: fromJS({
+        email: data.get('email').toLowerCase(),
+        password: data.get('password'),
+      }),
+    };
+  }
   return {
     type: AUTHORIZE,
     data,

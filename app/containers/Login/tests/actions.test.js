@@ -12,16 +12,21 @@ import {
 import {
   errorMessage,
   data,
+  dataUpperCaseEmail,
 } from 'tests/fixtures';
 
 describe('Login actions', () => {
   describe('authorize', () => {
+    const expected = {
+      type: AUTHORIZE,
+      data,
+    };
     it('should return the correct type', () => {
-      const expected = {
-        type: AUTHORIZE,
-        data,
-      };
       expect(authorize(data)).toEqual(expected);
+    });
+
+    it('should lowercase the email if not already', () => {
+      expect(authorize(dataUpperCaseEmail)).toEqual(expected);
     });
   });
 
