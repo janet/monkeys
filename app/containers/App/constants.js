@@ -10,3 +10,7 @@
  */
 
 export const DEFAULT_LOCALE = 'en';
+
+export const LOGOUT = 'app/LOGOUT';
+export const LOGOUT_SUCCESS = 'app/LOGOUT_SUCCESS';
+export const LOGOUT_ERROR = 'app/LOGOUT_ERROR';
