@@ -34,7 +34,9 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
   };
 
   componentWillMount() {
-    if (!this.props.loggedIn) {
+    if (this.props.loggedIn) {
+      browserHistory.push('/');
+    } else {
       browserHistory.push('/login');
     }
   }
