@@ -31,7 +31,7 @@ describe('Login actions', () => {
   });
 
   describe('authorizedSuccess', () => {
-    it('should return the correct type and the passed email', () => {
+    it('should return the correct type and isAuthorized true', () => {
       const expected = {
         type: AUTHORIZE_SUCCESS,
         isAuthorized: true,

@@ -17,12 +17,14 @@ export class Login extends React.PureComponent { // eslint-disable-line react/pr
     const {
       tryLogin,
       resetPasswordRedirect,
+      registerRedirect,
     } = this.props;
     return (
       <div>
         <LoginForm
           onSubmit={tryLogin}
           resetPasswordRedirect={resetPasswordRedirect}
+          registerRedirect={registerRedirect}
         />
       </div>
     );
@@ -32,6 +34,7 @@ export class Login extends React.PureComponent { // eslint-disable-line react/pr
 Login.propTypes = {
   tryLogin: PropTypes.func.isRequired,
   resetPasswordRedirect: PropTypes.func.isRequired,
+  registerRedirect: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -42,6 +45,7 @@ function mapDispatchToProps(dispatch) {
   return {
     tryLogin: (data) => dispatch(authorize(data)),
     resetPasswordRedirect: () => dispatch(push('/reset_password')),
+    registerRedirect: () => dispatch(push('/register')),
   };
 }
 

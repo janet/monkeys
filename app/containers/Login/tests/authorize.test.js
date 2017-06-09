@@ -1,22 +1,43 @@
 import expect from 'expect';
 import sinon from 'sinon';
 import 'whatwg-fetch';
+import { hashSync } from 'bcryptjs';
+import genSalt from '../salt';
+import { call,
+         put } from 'redux-saga/effects';
 
-import authorize from '../authorize';
-import { email, password, errorMessage } from 'tests/fixtures';
+import authorize, { processAuthorization } from '../authorize';
+import { email, password,
+         nameFirst, nameLast,
+         data, dataJS,
+         registerDataJS, errorMessage } from 'tests/fixtures';
 import { mockApiResponse } from 'tests/helpers';
-import request from 'utils/request';
+import { authorizingError } from '../actions';
+
 
 describe('authorize', () => {
   let fetchStub;
   const successResponse = { success: email };
   const failResponse = { error: errorMessage };
+  const logoutSuccessResponse = { success: 'logged out' };
   describe('login', () => {
-    it('should should request to process login from the server', () => {
-      const loginRequest = authorize.login(email, password);
-      expect(loginRequest).toEqual(
-        request(
-          'api/process_login',
+    beforeEach(() => {
+      fetchStub = sinon.stub(window, 'fetch');
+      localStorage.removeItem('token');
+    });
+
+    afterEach(() => {
+      fetchStub.restore();
+    });
+
+    it('should return true and set localStorage token when api request succeeds', () => {
+      fetchStub.returns(Promise.resolve(mockApiResponse(200, successResponse)));
+
+      return authorize.login(data.toJS()).then((isLoggedIn) => {
+        expect(isLoggedIn).toEqual(true);
+        expect(localStorage.token).toEqual(email);
+        expect(fetchStub.calledWith(
+          'api/login',
           {
             method: 'POST',
             headers: {
@@ -26,48 +47,86 @@ describe('authorize', () => {
               email,
               password,
             }),
+            credentials: 'include',
           }
-        )
-      );
+        )).toEqual(true);
+      });
     });
 
-    describe('login with stub request', () => {
-      beforeEach(() => {
-        fetchStub = sinon.stub(window, 'fetch');
-        localStorage.removeItem('token');
+    it('should throw an error when authentication fails', () => {
+      fetchStub.returns(Promise.resolve(mockApiResponse(200, failResponse)));
+
+      return authorize.login({ email, password })
+      .then(() => {
+        throw new Error('Expected rejection');
+      }, (err) => {
+        expect(err).toEqual(failResponse.error);
       });
+    });
+  });
 
-      afterEach(() => {
-        fetchStub.restore();
-      });
+  describe('logout', () => {
+    beforeEach(() => {
+      fetchStub = sinon.stub(window, 'fetch');
+      localStorage.removeItem('token');
+    });
 
-      it('should return true and set localStorage token when api request succeeds', () => {
-        fetchStub.returns(Promise.resolve(mockApiResponse(200, successResponse)));
+    afterEach(() => {
+      fetchStub.restore();
+    });
 
-        return authorize.login({ email, password }).then((isLoggedIn) => {
-          expect(isLoggedIn).toEqual(true);
-          expect(localStorage.token).toEqual(email);
+    it('should clear localStorage and return true when successful', () => {
+      localStorage.token = email;
+      fetchStub.returns(Promise.resolve(mockApiResponse(200, logoutSuccessResponse)));
+
+      return authorize.logout()
+        .then((logoutSuccess) => {
+          expect(logoutSuccess).toEqual(true);
+          expect(localStorage.length).toEqual(0);
         });
-      });
+    });
 
-      it('should throw an error when authentication fails', () => {
-        fetchStub.returns(Promise.resolve(mockApiResponse(200, failResponse)));
+    it('should throw an error when server responds with error message', () => {
+      fetchStub.returns(Promise.resolve(mockApiResponse(200, failResponse)));
 
-        return authorize.login({ email, password })
+      return authorize.logout()
         .then(() => {
           throw new Error('Expected rejection');
         }, (err) => {
           expect(err).toEqual(failResponse.error);
         });
-      });
     });
   });
 
-  describe('resetPassword', () => {
-    it('should request to reset password from the server', () => {
-      const resetPasswordRequest = authorize.resetPassword(email, password);
-      expect(resetPasswordRequest).toEqual(
-        request(
+  describe('loggedIn', () => {
+    beforeEach(() => {
+      localStorage.removeItem('token');
+    });
+    it('should return true when logged in', () => {
+      localStorage.token = email;
+      expect(authorize.loggedIn()).toEqual(true);
+    });
+    it('should return false when not logged in', () => {
+      expect(authorize.loggedIn()).toEqual(false);
+    });
+  });
+
+  describe('resetPassword with stub request', () => {
+    beforeEach(() => {
+      fetchStub = sinon.stub(window, 'fetch');
+      localStorage.removeItem('token');
+    });
+
+    afterEach(() => {
+      fetchStub.restore();
+    });
+
+    it('should return true when api request succeeds', () => {
+      fetchStub.returns(Promise.resolve(mockApiResponse(200, successResponse)));
+
+      return authorize.resetPassword(data.toJS()).then((passwordReset) => {
+        expect(passwordReset).toEqual(true);
+        expect(fetchStub.calledWith(
           'api/reset_password',
           {
             method: 'POST',
@@ -78,39 +137,108 @@ describe('authorize', () => {
               email,
               password,
             }),
+            credentials: 'include',
           }
-        )
-      );
+        )).toEqual(true);
+      });
     });
 
-    describe('resetPassword with stub request', () => {
-      beforeEach(() => {
-        fetchStub = sinon.stub(window, 'fetch');
-        localStorage.removeItem('token');
-      });
+    it('should throw an error when server responds with error message', () => {
+      fetchStub.returns(Promise.resolve(mockApiResponse(200, failResponse)));
 
-      afterEach(() => {
-        fetchStub.restore();
-      });
-
-      it('should return true when api request succeeds', () => {
-        fetchStub.returns(Promise.resolve(mockApiResponse(200, successResponse)));
-
-        return authorize.resetPassword({ email, password }).then((passwordReset) => {
-          expect(passwordReset).toEqual(true);
+      return authorize.resetPassword({ email, password })
+        .then(() => {
+          throw new Error('Expected rejection');
+        }, (err) => {
+          expect(err).toEqual(failResponse.error);
         });
-      });
-
-      it('should throw an error when server responds with error message', () => {
-        fetchStub.returns(Promise.resolve(mockApiResponse(200, failResponse)));
-
-        return authorize.resetPassword({ email, password })
-          .then(() => {
-            throw new Error('Expected rejection');
-          }, (err) => {
-            expect(err).toEqual(failResponse.error);
-          });
-      });
     });
+  });
+
+  describe('register', () => {
+    beforeEach(() => {
+      fetchStub = sinon.stub(window, 'fetch');
+      localStorage.removeItem('token');
+    });
+
+    afterEach(() => {
+      fetchStub.restore();
+    });
+
+    it('should return true when api request succeeds', () => {
+      fetchStub.returns(Promise.resolve(mockApiResponse(200, successResponse)));
+
+      return authorize.register(registerDataJS)
+        .then((registerSuccess) => {
+          expect(registerSuccess).toEqual(true);
+          expect(fetchStub.calledWith(
+            'api/register',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email,
+                password,
+                nameFirst,
+                nameLast,
+              }),
+              credentials: 'include',
+            })).toEqual(true);
+        });
+    });
+
+    it('should throw an error if server responds with error message', () => {
+      fetchStub.returns(Promise.resolve(mockApiResponse(200, failResponse)));
+
+      return authorize.register(registerDataJS)
+        .then(() => {
+          throw new Error('Expected rejection');
+        }, (err) => {
+          expect(err).toEqual(failResponse.error);
+        });
+    });
+  });
+});
+
+describe('processAuthorization', () => {
+  function getHashedData(dataToHash) {
+    const salt = genSalt(dataToHash.email);
+    const hash = hashSync(dataToHash.password, salt);
+    const hashedData = {
+      ...dataToHash,
+      password: hash,
+    };
+    return hashedData;
+  }
+  it('should call login with hashed data', () => {
+    const processAuthorizationGenerator = processAuthorization({ data: dataJS });
+    const hashedData = getHashedData(dataJS);
+    const callDescriptor = processAuthorizationGenerator.next().value;
+    expect(callDescriptor).toEqual(call(authorize.login, hashedData));
+  });
+
+  it('should call register with hashed data', () => {
+    const processAuthorizationGenerator = processAuthorization({ data: registerDataJS, isRegistering: true });
+    const hashedData = getHashedData(registerDataJS);
+    const callDescriptor = processAuthorizationGenerator.next().value;
+    expect(callDescriptor).toEqual(call(authorize.register, hashedData));
+  });
+
+  it('should call reset password with hashed data', () => {
+    const processAuthorizationGenerator = processAuthorization({ data: dataJS, isResettingPassword: true });
+    const hashedData = getHashedData(dataJS);
+    const callDescriptor = processAuthorizationGenerator.next().value;
+    expect(callDescriptor).toEqual(call(authorize.resetPassword, hashedData));
+  });
+
+  it('should call authorizingError action if the authorization response errors', () => {
+    const processAuthorizationGenerator = processAuthorization({ data: dataJS });
+    const response = new Error(errorMessage.msg);
+    // make the call
+    processAuthorizationGenerator.next();
+    const putDescriptor = processAuthorizationGenerator.throw(response).value;
+    expect(putDescriptor).toEqual(put(authorizingError(response)));
   });
 });

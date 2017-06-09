@@ -2,58 +2,25 @@ import { call,
          cancel,
          fork,
          put,
-         take,
-         race } from 'redux-saga/effects';
+         take } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 
 import { AUTHORIZE } from './constants';
-import { authorizedSuccess, authorizingError } from './actions';
-import authorize from './authorize';
-import genSalt from './salt';
-import { hashSync } from 'bcryptjs';
+import { authorizedSuccess } from './actions';
+import { processAuthorization } from './authorize';
 
-export function* processAuthorization({ email, password, isRegistering = false, isResettingPassword = false }) {
-  try {
-    const salt = genSalt(email);
-    const hash = hashSync(password, salt);
-
-    let authorizeResult;
-    if (isRegistering) {
-      authorizeResult = yield call(authorize.register, email, hash);
-    } else if (isResettingPassword) {
-      authorizeResult = yield call(authorize.resetPassword, email, hash);
-    } else {
-      authorizeResult = yield call(authorize.login, email, hash);
-    }
-
-    return authorizeResult;
-  } catch (err) {
-    yield put(authorizingError(err));
-    return false;
-  }
-}
 
 /**
  * Log in saga
  */
 export function* loginFlow() {
-  // Because sagas are generators, doing `while (true)` doesn't block our program
-  // Basically here we say "this saga is always listening for actions"
   while (true) {
-    // And we're listening for `AUTHORIZE` actions and destructuring its payload
     const authorizeResult = yield take(AUTHORIZE);
     const data = authorizeResult.data;
-    const email = data.get('email');
-    const password = data.get('password');
-
-    const winner = yield race({
-      authorize: call(processAuthorization, { email, password }),
-      // logout: take(LOGOUT),
-    });
-
-    if (winner.authorize) {
-      yield put(authorizedSuccess(winner.authorize));
+    const wasSuccessful = yield call(processAuthorization, { data: data.toJS() });
+    if (wasSuccessful) {
+      yield put(authorizedSuccess(wasSuccessful));
       yield call(browserHistory.push, '/');
     }
   }
