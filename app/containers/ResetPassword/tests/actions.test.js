@@ -32,7 +32,7 @@ describe('ResetPassword actions', () => {
   });
 
   describe('resetPasswordSuccess', () => {
-    it('should return the correct type and the passed email', () => {
+    it('should return the correct type and isAuthorized true', () => {
       const expected = {
         type: RESET_PASSWORD_SUCCESS,
         isAuthorized: true,

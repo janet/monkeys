@@ -12,6 +12,7 @@ describe('<Login />', () => {
       <Login
         tryLogin={EMPTY_FUNCTION}
         resetPasswordRedirect={EMPTY_FUNCTION}
+        registerRedirect={EMPTY_FUNCTION}
       />
     );
     const loginFormComponent = wrapper.find(LoginForm);

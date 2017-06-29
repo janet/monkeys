@@ -30,7 +30,7 @@ describe('selectIsAuthorized', () => {
   });
 });
 
-describe('selectError', () => {
+describe('selectError in ResetPassword', () => {
   const errorSelector = selectError();
   it('should select the error', () => {
     const mockedState = fromJS({

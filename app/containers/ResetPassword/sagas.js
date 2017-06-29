@@ -8,7 +8,7 @@ import { browserHistory } from 'react-router';
 
 import { RESET_PASSWORD } from './constants';
 import { resetPasswordSuccess } from './actions';
-import { processAuthorization } from 'containers/Login/sagas';
+import { processAuthorization } from 'containers/Login/authorize';
 
 
 /** Reset password saga
@@ -16,13 +16,11 @@ import { processAuthorization } from 'containers/Login/sagas';
 export function* resetPasswordFlow() {
   while (true) {
     const resetPasswordRequest = yield take(RESET_PASSWORD);
-    const data = resetPasswordRequest.data;
-    const email = data.get('email');
-    const password = data.get('password');
+    const data = resetPasswordRequest.data.toJS();
 
     const wasSuccessful = yield call(
       processAuthorization,
-      { email, password, isResettingPassword: true }
+      { data, isResettingPassword: true }
     );
 
     if (wasSuccessful) {

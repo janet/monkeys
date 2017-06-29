@@ -7,64 +7,69 @@ import { call,
          put,
          take,
          fork,
-         cancel,
-         race } from 'redux-saga/effects';
+         cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import genSalt from '../salt';
-import { hashSync } from 'bcryptjs';
+import { browserHistory } from 'react-router';
 
 import { AUTHORIZE } from '../constants';
-import { authorizedSuccess, authorizingError } from '../actions';
-import { processAuthorization, loginFlow,
+import { authorizedSuccess } from '../actions';
+import { loginFlow,
         loginFlowWatcher, loginFlowData } from '../sagas';
-import { email, password, data } from 'tests/fixtures';
-import authorize from '../authorize';
+import { data, dataJS } from 'tests/fixtures';
+import { processAuthorization } from '../authorize';
 
 
 describe('loginFlow Saga', () => {
-  const loginFlowGenerator = loginFlow();
+  describe('success path', () => {
+    const loginFlowGenerator = loginFlow();
 
-  it('should watch for AUTHORIZE action', () => {
-    const takeDescriptor = loginFlowGenerator.next().value;
-    expect(takeDescriptor).toEqual(take(AUTHORIZE));
+    it('should watch for AUTHORIZE action', () => {
+      const takeDescriptor = loginFlowGenerator.next().value;
+      expect(takeDescriptor).toEqual(take(AUTHORIZE));
+    });
+
+    it('should call processAuthorization with data', () => {
+      const authorizeResultMock = {
+        type: AUTHORIZE,
+        data,
+      };
+      const callDescriptor = loginFlowGenerator.next(authorizeResultMock).value;
+      expect(callDescriptor).toEqual(call(processAuthorization, { data: dataJS }));
+    });
+
+    it('should dispatch the authorizedSuccess action if authorization succeeds', () => {
+      const wasSuccessful = true;
+      const putDescriptor = loginFlowGenerator.next(wasSuccessful).value;
+      expect(putDescriptor).toEqual(put(authorizedSuccess(true)));
+    });
+
+    it('should reroute to / when authorization succeeds', () => {
+      const callDescriptor = loginFlowGenerator.next().value;
+      expect(callDescriptor).toEqual(call(browserHistory.push, '/'));
+    });
   });
+  describe('fail path', () => {
+    const loginFlowGenerator = loginFlow();
 
-  it('should start a race condition with authorize and logout', () => {
-    const authorizeResultMock = {
-      type: AUTHORIZE,
-      data,
-    };
-    const raceDescriptor = loginFlowGenerator.next(authorizeResultMock).value;
-    expect(raceDescriptor).toEqual(race(
-      {
-        authorize: call(processAuthorization, { email, password }),
-        // logout: take(LOGOUT),
-      })
-    );
-  });
+    it('should watch for AUTHORIZE action', () => {
+      const takeDescriptor = loginFlowGenerator.next().value;
+      expect(takeDescriptor).toEqual(take(AUTHORIZE));
+    });
 
-  it('should dispatch the authorizedSuccess action if authorization succeeds', () => {
-    const authorizeWinner = { authorize: true };
-    const putDescriptor = loginFlowGenerator.next(authorizeWinner).value;
-    expect(putDescriptor).toEqual(put(authorizedSuccess(true)));
-  });
-});
+    it('should call processAuthorization with data', () => {
+      const authorizeResultMock = {
+        type: AUTHORIZE,
+        data,
+      };
+      const callDescriptor = loginFlowGenerator.next(authorizeResultMock).value;
+      expect(callDescriptor).toEqual(call(processAuthorization, { data: dataJS }));
+    });
 
-describe('processAuthorization Saga', () => {
-  let processAuthorizationGenerator;
-
-  beforeEach(() => {
-    processAuthorizationGenerator = processAuthorization({ email, password });
-    const salt = genSalt(email);
-    const hash = hashSync(password, salt);
-    const callDescriptor = processAuthorizationGenerator.next().value;
-    expect(callDescriptor).toEqual(call(authorize.login, email, hash));
-  });
-
-  it('should call the authorizingError action if the authorization response errors', () => {
-    const response = new Error('i am error');
-    const putDescriptor = processAuthorizationGenerator.throw(response).value;
-    expect(putDescriptor).toEqual(put(authorizingError(response)));
+    it('should do nothing if authorization fails because the failure is handled in processAuthorization', () => {
+      const wasSuccessful = false;
+      const takeDescriptor = loginFlowGenerator.next(wasSuccessful).value;
+      expect(takeDescriptor).toEqual(take(AUTHORIZE));
+    });
   });
 });
 

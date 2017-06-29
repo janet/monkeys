@@ -1,5 +1,4 @@
 import expect from 'expect';
-// import { fromJS } from 'immutable';
 
 import resetPasswordReducer, { initialState } from '../reducer';
 import {

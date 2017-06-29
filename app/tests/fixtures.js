@@ -78,9 +78,30 @@ export const data = fromJS({
   password,
 });
 
+export const dataJS = data.toJS();
+
 export const dataUpperCaseEmail = fromJS({
   email: emailUpperCase,
   password,
+});
+
+export const nameFirst = 'Janet';
+export const nameLast = 'Kenmotsu';
+
+export const registerData = fromJS({
+  email,
+  password,
+  nameFirst,
+  nameLast,
+});
+
+export const registerDataJS = registerData.toJS();
+
+export const registerDataUpperCaseEmail = fromJS({
+  email: emailUpperCase,
+  password,
+  nameFirst,
+  nameLast,
 });
 
 export const isAuthorized = true;

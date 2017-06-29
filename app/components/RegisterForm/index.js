@@ -1,6 +1,6 @@
 /**
 *
-* LoginForm
+* RegisterForm
 *
 */
 
@@ -14,25 +14,23 @@ import { createStructuredSelector } from 'reselect';
 import CenteredWrapper from 'components/Wrappers/CenteredWrapper';
 import ColumnWrapper from 'components/Wrappers/ColumnWrapper';
 import TextFieldInput from 'components/TextFieldInput';
-import { validate } from './Validate';
 import ErrorMessage from 'components/ErrorMessage';
-import { selectError } from 'containers/Login/selectors';
+import { validate } from './Validate';
+import { selectError } from 'containers/Register/selectors';
 
 
-class LoginForm extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-
+class RegisterForm extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     const {
       handleSubmit,
-      resetPasswordRedirect,
-      registerRedirect,
+      loginRedirect,
       error,
     } = this.props;
 
     return (
       <CenteredWrapper>
         <ColumnWrapper>
-          {error ? <ErrorMessage error={error} resetPasswordRedirect={resetPasswordRedirect} /> : null}
+          {error ? <ErrorMessage error={error} /> : null}
           <form autoComplete="off" onSubmit={handleSubmit}>
             <div>
               <Field
@@ -52,11 +50,27 @@ class LoginForm extends React.PureComponent { // eslint-disable-line react/prefe
               />
             </div>
             <div>
-              <RaisedButton type="submit" label="Log In" primary />
+              <Field
+                name="nameFirst"
+                type="text"
+                floatingLabelText="First Name"
+                component={TextFieldInput}
+              />
+            </div>
+            <div>
+              <Field
+                name="nameLast"
+                type="text"
+                floatingLabelText="Last Name"
+                component={TextFieldInput}
+              />
+            </div>
+            <div>
+              <RaisedButton type="submit" label="Register" primary />
               <FlatButton
                 type="button"
-                label="Register"
-                onTouchTap={registerRedirect}
+                label="Back to Login"
+                onTouchTap={loginRedirect}
                 primary
               />
             </div>
@@ -67,10 +81,9 @@ class LoginForm extends React.PureComponent { // eslint-disable-line react/prefe
   }
 }
 
-LoginForm.propTypes = {
+RegisterForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  resetPasswordRedirect: PropTypes.func.isRequired,
-  registerRedirect: PropTypes.func.isRequired,
+  loginRedirect: PropTypes.func.isRequired,
   error: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.bool,
@@ -82,6 +95,6 @@ const mapStateToProps = createStructuredSelector({
 });
 
 export default reduxForm({
-  form: 'LoginForm',
+  form: 'RegisterForm',
   validate,
-})(connect(mapStateToProps)(LoginForm));
+})(connect(mapStateToProps)(RegisterForm));

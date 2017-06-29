@@ -13,40 +13,68 @@ import { browserHistory } from 'react-router';
 
 import { RESET_PASSWORD } from '../constants';
 import { resetPasswordSuccess } from '../actions';
-import { processAuthorization } from 'containers/Login/sagas';
+import { processAuthorization } from 'containers/Login/authorize';
 import { resetPasswordFlow, resetPasswordFlowWatcher,
          resetPasswordData } from '../sagas';
-import { email, password, data } from 'tests/fixtures';
+import { data } from 'tests/fixtures';
 
 describe('resetPasswordFlow Saga', () => {
-  const resetPasswordFlowGenerator = resetPasswordFlow();
+  describe('success path', () => {
+    const resetPasswordFlowGenerator = resetPasswordFlow();
 
-  it('should watch for RESET_PASSWORD action', () => {
-    const takeDescriptor = resetPasswordFlowGenerator.next().value;
-    expect(takeDescriptor).toEqual(take(RESET_PASSWORD));
+    it('should watch for RESET_PASSWORD action', () => {
+      const takeDescriptor = resetPasswordFlowGenerator.next().value;
+      expect(takeDescriptor).toEqual(take(RESET_PASSWORD));
+    });
+
+    it('should call the processAuthorization saga with email and password', () => {
+      const resetPasswordRequestMock = {
+        type: RESET_PASSWORD,
+        data,
+      };
+      const callDescriptor = resetPasswordFlowGenerator.next(resetPasswordRequestMock).value;
+      expect(callDescriptor).toEqual(call(
+        processAuthorization,
+        { data: data.toJS(), isResettingPassword: true }
+      ));
+    });
+
+    it('should dispatch the resetPasswordSuccess action if authorization succeeds', () => {
+      const wasSuccessful = true;
+      const putDescriptor = resetPasswordFlowGenerator.next(wasSuccessful).value;
+      expect(putDescriptor).toEqual(put(resetPasswordSuccess(wasSuccessful)));
+    });
+
+    it('should reroute to /login when authorization succeeds', () => {
+      const callDescriptor = resetPasswordFlowGenerator.next().value;
+      expect(callDescriptor).toEqual(call(browserHistory.push, '/login'));
+    });
   });
+  describe('fail path', () => {
+    const resetPasswordFlowGenerator = resetPasswordFlow();
 
-  it('should call the processAuthorization saga with email and password', () => {
-    const resetPasswordRequestMock = {
-      type: RESET_PASSWORD,
-      data,
-    };
-    const callDescriptor = resetPasswordFlowGenerator.next(resetPasswordRequestMock).value;
-    expect(callDescriptor).toEqual(call(
-      processAuthorization,
-      { email, password, isResettingPassword: true }
-    ));
-  });
+    it('should watch for RESET_PASSWORD action', () => {
+      const takeDescriptor = resetPasswordFlowGenerator.next().value;
+      expect(takeDescriptor).toEqual(take(RESET_PASSWORD));
+    });
 
-  it('should dispatch the resetPasswordSuccess action if authorization succeeds', () => {
-    const wasSuccessful = true;
-    const putDescriptor = resetPasswordFlowGenerator.next(wasSuccessful).value;
-    expect(putDescriptor).toEqual(put(resetPasswordSuccess(wasSuccessful)));
-  });
+    it('should call the processAuthorization saga with email and password', () => {
+      const resetPasswordRequestMock = {
+        type: RESET_PASSWORD,
+        data,
+      };
+      const callDescriptor = resetPasswordFlowGenerator.next(resetPasswordRequestMock).value;
+      expect(callDescriptor).toEqual(call(
+        processAuthorization,
+        { data: data.toJS(), isResettingPassword: true }
+      ));
+    });
 
-  it('should reroute to /login when authorization succeeds', () => {
-    const callDescriptor = resetPasswordFlowGenerator.next().value;
-    expect(callDescriptor).toEqual(call(browserHistory.push, '/login'));
+    it('should do nothing if authorization fails because the failure is handled in processAuthorization', () => {
+      const wasSuccessful = false;
+      const takeDescriptor = resetPasswordFlowGenerator.next(wasSuccessful).value;
+      expect(takeDescriptor).toEqual(take(RESET_PASSWORD));
+    });
   });
 });
 
