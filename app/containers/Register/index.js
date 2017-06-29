@@ -10,7 +10,6 @@ import { push } from 'react-router-redux';
 import RegisterForm from 'components/RegisterForm';
 
 import { register } from './actions';
-import { selectError } from './selectors';
 
 export class Register extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
@@ -34,8 +33,6 @@ Register.propTypes = {
   loginRedirect: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = selectError();
-
 function mapDispatchToProps(dispatch) {
   return {
     tryRegister: (data) => dispatch(register(data)),
@@ -43,4 +40,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(null, mapDispatchToProps)(Register);
