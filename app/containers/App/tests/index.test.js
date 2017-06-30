@@ -4,24 +4,21 @@
 
 import expect from 'expect';
 import React from 'react';
-import { mount } from 'enzyme';
 import AppBar from 'material-ui//AppBar';
 import FlatButton from 'material-ui/FlatButton';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import { App } from '../index';
 import { EMPTY_FUNCTION } from 'tests/fixtures';
+import { mountWithContext } from 'tests/helpers';
 
 describe('<App />', () => {
-  const mountWithContext = (node) => mount(node, {
-    context: {
-      muiTheme: getMuiTheme(),
-    },
-    childContextTypes: {
-      muiTheme: React.PropTypes.object.isRequired,
-    },
-  });
-
+  // 'injectTapEventPlugin' is a dependency of material-ui
+  // and must be added once into the test environment.
+  // adding it under the App test, assuming this will never be taken out.
+  // It prevents the following warning:
+  // Unknown prop `onTouchTap` on <label> tag
+  injectTapEventPlugin();
   it('should render the AppBar with sign in button when not logged in', () => {
     const loginRedirectSpy = expect.createSpy();
     const renderedComponent = mountWithContext(

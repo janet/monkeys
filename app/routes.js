@@ -110,6 +110,14 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: '/confirm/:token',
+      name: 'confirmEmail',
+      getComponent(location, cb) {
+        System.import('containers/ConfirmEmail')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
