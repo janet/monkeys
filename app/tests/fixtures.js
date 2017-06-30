@@ -107,6 +107,7 @@ export const registerDataUpperCaseEmail = fromJS({
 export const isAuthorized = true;
 
 export const EMPTY_FUNCTION = () => {};
+export const EMPTY_OBJECT = {};
 
 export const fakeInput = {
   name: 'email',
@@ -122,3 +123,13 @@ export const meta = {
   touched: false,
   error: false,
 };
+
+export const token = 'vxchioulnkjasguhi.as.df584';
+
+export const emailNotConfirmedData = fromJS({
+  emailConfirmed: false,
+});
+
+export const emailConfirmedData = fromJS({
+  emailConfirmed: true,
+});

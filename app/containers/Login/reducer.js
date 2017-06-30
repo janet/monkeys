@@ -22,7 +22,8 @@ function loginReducer(state = initialState, action) {
       return state;
     case AUTHORIZE_SUCCESS:
       return state
-        .set('isAuthorized', action.isAuthorized);
+        .set('isAuthorized', action.isAuthorized)
+        .set('error', false);
     case AUTHORIZE_ERROR:
       return state
         .set('error', action.error);
