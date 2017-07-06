@@ -112,10 +112,23 @@ export default function createRoutes(store) {
     }, {
       path: '/confirm/:token',
       name: 'confirmEmail',
-      getComponent(location, cb) {
-        System.import('containers/ConfirmEmail')
-          .then(loadModule(cb))
-          .catch(errorLoading);
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/ConfirmEmail/reducer'),
+          System.import('containers/ConfirmEmail/sagas'),
+          System.import('containers/ConfirmEmail'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('confirmEmail', reducer.default);
+          injectSagas(sagas.default);
+
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
       },
     }, {
       path: '*',

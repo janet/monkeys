@@ -27,18 +27,21 @@ describe('loginReducer', () => {
     expect(loginReducer(state, authorize())).toEqual(expected);
   });
 
-  it('should handle the authorizedSuccess action correctly when authorization succeeds', () => {
-    const expected = state
+  it('should handle the authorizedSuccess action correctly', () => {
+    const expectedSuccess = state
       .set('isAuthorized', true);
 
-    expect(loginReducer(state, authorizedSuccess(true))).toEqual(expected);
-  });
+    expect(loginReducer(state, authorizedSuccess(true))).toEqual(expectedSuccess);
 
-  it('should handle the authorizedSuccess action correctly when given an expected error from the server', () => {
     const serverError = { error: errorMessage };
-    const expected = state
+    const expectedError = state
       .set('error', errorMessage);
-    expect(loginReducer(state, authorizedSuccess(serverError))).toEqual(expected);
+    expect(loginReducer(state, authorizedSuccess(serverError))).toEqual(expectedError);
+
+    const expectedSuccessAfterError = state
+      .set('isAuthorized', true)
+      .set('error', false);
+    expect(loginReducer(state, authorizedSuccess(true))).toEqual(expectedSuccessAfterError);
   });
 
   it('should handle the authorizingError action correctly', () => {
