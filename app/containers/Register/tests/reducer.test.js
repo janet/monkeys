@@ -26,16 +26,21 @@ describe('registerReducer', () => {
     expect(registerReducer(state, register())).toEqual(expected);
   });
 
-  it('should handle the registerSuccess action correctly when registering succeeds', () => {
-    const expected = state;
-    expect(registerReducer(state, registerSuccess(true))).toEqual(expected);
-  });
-
-  it('should handle the registerSuccess action correctly when registering fails', () => {
-    const serverError = { error: errorMessage };
+  it('should handle the registerSuccess action correctly', () => {
     const expected = state
-      .set('error', errorMessage);
-    expect(registerReducer(state, registerSuccess(serverError))).toEqual(expected);
+      .set('success', true);
+    expect(registerReducer(state, registerSuccess(true))).toEqual(expected);
+
+    const serverError = { error: errorMessage };
+    const expectedError = state
+      .set('error', errorMessage)
+      .set('success', false);
+    expect(registerReducer(state, registerSuccess(serverError))).toEqual(expectedError);
+
+    const expectedSuccessAfterFail = state
+      .set('success', true)
+      .set('error', false);
+    expect(registerReducer(state, registerSuccess(true))).toEqual(expectedSuccessAfterFail);
   });
 
   it('should handle the registeringError action correctly', () => {
