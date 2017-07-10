@@ -15,6 +15,7 @@ export class Register extends React.PureComponent { // eslint-disable-line react
   render() {
     const {
       loginRedirect,
+      resetPasswordRedirect,
       tryRegister,
     } = this.props;
     return (
@@ -22,6 +23,7 @@ export class Register extends React.PureComponent { // eslint-disable-line react
         <RegisterForm
           onSubmit={tryRegister}
           loginRedirect={loginRedirect}
+          resetPasswordRedirect={resetPasswordRedirect}
         />
       </div>
     );
@@ -30,12 +32,14 @@ export class Register extends React.PureComponent { // eslint-disable-line react
 
 Register.propTypes = {
   tryRegister: PropTypes.func.isRequired,
+  resetPasswordRedirect: PropTypes.func.isRequired,
   loginRedirect: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
     tryRegister: (data) => dispatch(register(data)),
+    resetPasswordRedirect: () => dispatch(push('/reset_password')),
     loginRedirect: () => dispatch(push('/login')),
   };
 }
