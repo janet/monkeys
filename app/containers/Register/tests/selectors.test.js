@@ -1,5 +1,6 @@
 import { selectRegister,
-         selectError } from '../selectors';
+         selectError,
+         selectSuccess } from '../selectors';
 import { initialState } from '../reducer';
 import { errorMessage } from 'tests/fixtures';
 
@@ -28,3 +29,17 @@ describe('selectError in Register', () => {
     expect(errorSelector(mockedState)).toEqual(errorMessage.msg);
   });
 });
+
+describe('selectSuccess in Register', () => {
+  const successSelector = selectSuccess();
+  it('should select success', () => {
+    const mockedState = fromJS({
+      register: {
+        error: errorMessage.msg,
+        success: true,
+      },
+    });
+    expect(successSelector(mockedState)).toEqual(true);
+  });
+});
+
