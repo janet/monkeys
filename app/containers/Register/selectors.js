@@ -1,9 +1,15 @@
 import { createSelector } from 'reselect';
+import { EMPTY_IMMUTABLE_OBJECT } from 'tests/fixtures';
 
 /**
  * Direct selector to the register state domain
  */
-const selectRegister = () => (state) => state.get('register');
+const selectRegister = () => (state) => {
+  if (state.has('register')) {
+    return state.get('register');
+  }
+  return EMPTY_IMMUTABLE_OBJECT;
+};
 
 /**
  * Other specific selectors
@@ -14,7 +20,18 @@ const selectError = () => createSelector(
   (registerState) => registerState.get('error')
 );
 
+const selectRegisterSuccess = () => createSelector(
+  selectRegister(),
+  (registerState) => {
+    if (registerState.has('success')) {
+      return registerState.get('success');
+    }
+    return EMPTY_IMMUTABLE_OBJECT;
+  }
+);
+
 export {
   selectRegister,
   selectError,
+  selectRegisterSuccess,
 };

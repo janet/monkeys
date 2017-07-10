@@ -13,6 +13,7 @@ import {
 
 export const initialState = fromJS({
   error: false,
+  success: false,
 });
 
 function registerReducer(state = initialState, action) {
@@ -20,9 +21,11 @@ function registerReducer(state = initialState, action) {
     case REGISTER:
       return state;
     case REGISTER_SUCCESS:
-      return state;
+      return state
+        .set('success', true);
     case REGISTER_ERROR:
       return state
+        .set('success', false)
         .set('error', action.error);
     default:
       return state;

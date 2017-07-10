@@ -108,6 +108,7 @@ export const isAuthorized = true;
 
 export const EMPTY_FUNCTION = () => {};
 export const EMPTY_OBJECT = {};
+export const EMPTY_IMMUTABLE_OBJECT = fromJS(EMPTY_OBJECT);
 
 export const fakeInput = {
   name: 'email',

@@ -11,6 +11,9 @@ import { push } from 'react-router-redux';
 import { authorize } from './actions';
 import LoginForm from 'components/LoginForm';
 import { selectIsAuthorized } from './selectors';
+import { selectRegisterSuccess } from 'containers/Register/selectors';
+import RegisteredMessage from 'components/RegisteredMessage';
+
 
 export class Login extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
@@ -18,9 +21,14 @@ export class Login extends React.PureComponent { // eslint-disable-line react/pr
       tryLogin,
       resetPasswordRedirect,
       registerRedirect,
+      registerSuccess,
     } = this.props;
+    const registered = registerSuccess === true ? <RegisteredMessage registerSuccess={registerSuccess} /> : '';
     return (
       <div>
+        <div>
+          {registered}
+        </div>
         <LoginForm
           onSubmit={tryLogin}
           resetPasswordRedirect={resetPasswordRedirect}
@@ -35,10 +43,15 @@ Login.propTypes = {
   tryLogin: PropTypes.func.isRequired,
   resetPasswordRedirect: PropTypes.func.isRequired,
   registerRedirect: PropTypes.func.isRequired,
+  registerSuccess: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
 };
 
 const mapStateToProps = createStructuredSelector({
   isAuthorized: selectIsAuthorized(),
+  registerSuccess: selectRegisterSuccess(),
 });
 
 function mapDispatchToProps(dispatch) {
