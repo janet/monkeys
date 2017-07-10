@@ -20,7 +20,7 @@ const selectError = () => createSelector(
   (registerState) => registerState.get('error')
 );
 
-const selectSuccess = () => createSelector(
+const selectRegisterSuccess = () => createSelector(
   selectRegister(),
   (registerState) => {
     if (registerState.has('success')) {
@@ -33,5 +33,5 @@ const selectSuccess = () => createSelector(
 export {
   selectRegister,
   selectError,
-  selectSuccess,
+  selectRegisterSuccess,
 };

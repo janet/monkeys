@@ -1,6 +1,6 @@
 import { selectRegister,
          selectError,
-         selectSuccess } from '../selectors';
+         selectRegisterSuccess } from '../selectors';
 import { initialState } from '../reducer';
 import { errorMessage, EMPTY_IMMUTABLE_OBJECT } from 'tests/fixtures';
 
@@ -38,7 +38,7 @@ describe('selectError in Register', () => {
 });
 
 describe('selectSuccess in Register', () => {
-  const successSelector = selectSuccess();
+  const successSelector = selectRegisterSuccess();
   it('should select success', () => {
     const mockedState = fromJS({
       register: {
