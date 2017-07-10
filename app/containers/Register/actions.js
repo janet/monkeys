@@ -9,6 +9,7 @@ import {
   REGISTER,
   REGISTER_SUCCESS,
   REGISTER_ERROR,
+  RESET_REGISTER,
 } from './constants';
 
 export function register(data) {
@@ -50,5 +51,11 @@ export function registeringError(error) {
   return {
     type: REGISTER_ERROR,
     error,
+  };
+}
+
+export function resetRegister() {
+  return {
+    type: RESET_REGISTER,
   };
 }
