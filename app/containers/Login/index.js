@@ -23,7 +23,7 @@ export class Login extends React.PureComponent { // eslint-disable-line react/pr
       registerRedirect,
       registerSuccess,
     } = this.props;
-    const registered = registerSuccess ? <RegisteredMessage registerSuccess={registerSuccess} /> : '';
+    const registered = registerSuccess === true ? <RegisteredMessage registerSuccess={registerSuccess} /> : '';
     return (
       <div>
         <div>
