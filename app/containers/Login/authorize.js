@@ -1,5 +1,7 @@
 // based on https://github.com/sotojuan/saga-login-flow/
 import { authorizingError } from './actions';
+import { registeringError } from 'containers/Register/actions';
+import { resettingPasswordError } from 'containers/ResetPassword/actions';
 
 import { call,
          put } from 'redux-saga/effects';
@@ -166,7 +168,13 @@ export function* processAuthorization({ data, isRegistering = false, isResetting
 
     return authorizeResult;
   } catch (err) {
-    yield put(authorizingError(err));
+    if (isRegistering) {
+      yield put(registeringError(err));
+    } else if (isResettingPassword) {
+      yield put(resettingPasswordError(err));
+    } else {
+      yield put(authorizingError(err));
+    }
     return false;
   }
 }
