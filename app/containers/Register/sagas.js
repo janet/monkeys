@@ -37,8 +37,8 @@ export function* registerFlowData() {
   const watcher = yield fork(registerFlowWatcher);
 
   yield take(LOCATION_CHANGE);
-  yield cancel(watcher);
   yield put(resetRegister());
+  yield cancel(watcher);
 }
 
 export default [
