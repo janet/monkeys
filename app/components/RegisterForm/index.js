@@ -24,13 +24,14 @@ class RegisterForm extends React.PureComponent { // eslint-disable-line react/pr
     const {
       handleSubmit,
       loginRedirect,
+      resetPasswordRedirect,
       error,
     } = this.props;
 
     return (
       <CenteredWrapper>
         <ColumnWrapper>
-          {error ? <ErrorMessage error={error} /> : null}
+          {error ? <ErrorMessage error={error} resetPasswordRedirect={resetPasswordRedirect} /> : null}
           <form autoComplete="off" onSubmit={handleSubmit}>
             <div>
               <Field
@@ -84,6 +85,7 @@ class RegisterForm extends React.PureComponent { // eslint-disable-line react/pr
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   loginRedirect: PropTypes.func.isRequired,
+  resetPasswordRedirect: PropTypes.func.isRequired,
   error: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.bool,

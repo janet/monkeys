@@ -5,6 +5,7 @@ import {
   register,
   registerSuccess,
   registeringError,
+  resetRegister,
 } from '../actions';
 import {
   errorMessage,
@@ -47,5 +48,15 @@ describe('registerReducer', () => {
     const expected = state
       .set('error', errorMessage);
     expect(registerReducer(state, registeringError(errorMessage))).toEqual(expected);
+  });
+
+  it('should handle the resetRegister action correctly', () => {
+    state
+      .set('error', 'hi i am an error message')
+      .set('success', 'i am here too');
+    const expected = state
+      .set('error', false)
+      .set('success', false);
+    expect(registerReducer(state, resetRegister())).toEqual(expected);
   });
 });

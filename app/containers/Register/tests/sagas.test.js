@@ -12,7 +12,8 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 
 import { REGISTER } from '../constants';
-import { registerSuccess } from '../actions';
+import { registerSuccess,
+         resetRegister } from '../actions';
 import { processAuthorization } from 'containers/Login/authorize';
 import { registerFlow,
          registerFlowWatcher,
@@ -103,6 +104,11 @@ describe('registerFlowData Saga', () => {
   it('should yield until LOCATION_CHANGE action', () => {
     const takeDescriptor = registerFlowDataSaga.next().value;
     expect(takeDescriptor).toEqual(take(LOCATION_CHANGE));
+  });
+
+  it('should call the resetRegister action', () => {
+    const putDescriptor = registerFlowDataSaga.next().value;
+    expect(putDescriptor).toEqual(put(resetRegister()));
   });
 
   it('should finally cancel the forked registerFlowWatcher saga',

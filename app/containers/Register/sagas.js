@@ -7,7 +7,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 
 import { REGISTER } from './constants';
-import { registerSuccess } from './actions';
+import { registerSuccess, resetRegister } from './actions';
 import { processAuthorization } from 'containers/Login/authorize';
 
 // Individual exports for testing
@@ -37,6 +37,7 @@ export function* registerFlowData() {
   const watcher = yield fork(registerFlowWatcher);
 
   yield take(LOCATION_CHANGE);
+  yield put(resetRegister());
   yield cancel(watcher);
 }
 

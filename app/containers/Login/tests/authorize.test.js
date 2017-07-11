@@ -13,6 +13,8 @@ import { email, password,
          registerDataJS, errorMessage } from 'tests/fixtures';
 import { mockApiResponse } from 'tests/helpers';
 import { authorizingError } from '../actions';
+import { registeringError } from 'containers/Register/actions';
+import { resettingPasswordError } from 'containers/ResetPassword/actions';
 
 
 describe('authorize', () => {
@@ -212,33 +214,65 @@ describe('processAuthorization', () => {
     };
     return hashedData;
   }
-  it('should call login with hashed data', () => {
-    const processAuthorizationGenerator = processAuthorization({ data: dataJS });
-    const hashedData = getHashedData(dataJS);
-    const callDescriptor = processAuthorizationGenerator.next().value;
-    expect(callDescriptor).toEqual(call(authorize.login, hashedData));
+  let processAuthorizationGenerator;
+
+  describe('authorize', () => {
+    beforeEach(() => {
+      processAuthorizationGenerator = processAuthorization({ data: dataJS });
+    });
+
+    it('should call login with hashed data', () => {
+      const hashedData = getHashedData(dataJS);
+      const callDescriptor = processAuthorizationGenerator.next().value;
+      expect(callDescriptor).toEqual(call(authorize.login, hashedData));
+    });
+
+    it('should call authorizingError action if login errors', () => {
+      const response = new Error(errorMessage.msg);
+      // make the call
+      processAuthorizationGenerator.next();
+      const putDescriptor = processAuthorizationGenerator.throw(response).value;
+      expect(putDescriptor).toEqual(put(authorizingError(response)));
+    });
   });
 
-  it('should call register with hashed data', () => {
-    const processAuthorizationGenerator = processAuthorization({ data: registerDataJS, isRegistering: true });
-    const hashedData = getHashedData(registerDataJS);
-    const callDescriptor = processAuthorizationGenerator.next().value;
-    expect(callDescriptor).toEqual(call(authorize.register, hashedData));
+  describe('isRegistering', () => {
+    beforeEach(() => {
+      processAuthorizationGenerator = processAuthorization({ data: registerDataJS, isRegistering: true });
+    });
+
+    it('should call register with hashed data', () => {
+      const hashedData = getHashedData(registerDataJS);
+      const callDescriptor = processAuthorizationGenerator.next().value;
+      expect(callDescriptor).toEqual(call(authorize.register, hashedData));
+    });
+
+    it('should call registeringError action if registerring errors', () => {
+      const response = new Error(errorMessage.msg);
+      // make the call
+      processAuthorizationGenerator.next();
+      const putDescriptor = processAuthorizationGenerator.throw(response).value;
+      expect(putDescriptor).toEqual(put(registeringError(response)));
+    });
   });
 
-  it('should call reset password with hashed data', () => {
-    const processAuthorizationGenerator = processAuthorization({ data: dataJS, isResettingPassword: true });
-    const hashedData = getHashedData(dataJS);
-    const callDescriptor = processAuthorizationGenerator.next().value;
-    expect(callDescriptor).toEqual(call(authorize.resetPassword, hashedData));
-  });
+  describe('isResettingPassword', () => {
+    beforeEach(() => {
+      processAuthorizationGenerator = processAuthorization({ data: dataJS, isResettingPassword: true });
+    });
 
-  it('should call authorizingError action if the authorization response errors', () => {
-    const processAuthorizationGenerator = processAuthorization({ data: dataJS });
-    const response = new Error(errorMessage.msg);
-    // make the call
-    processAuthorizationGenerator.next();
-    const putDescriptor = processAuthorizationGenerator.throw(response).value;
-    expect(putDescriptor).toEqual(put(authorizingError(response)));
+    it('should call reset password with hashed data', () => {
+      const hashedData = getHashedData(dataJS);
+      const callDescriptor = processAuthorizationGenerator.next().value;
+      expect(callDescriptor).toEqual(call(authorize.resetPassword, hashedData));
+    });
+
+    it('should call resettingPasswordError action if resetting password errors', () => {
+      const response = new Error(errorMessage.msg);
+      // make the call
+      processAuthorizationGenerator.next();
+      const putDescriptor = processAuthorizationGenerator.throw(response).value;
+      expect(putDescriptor).toEqual(put(resettingPasswordError(response)));
+    });
   });
 });
