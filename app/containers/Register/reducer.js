@@ -29,7 +29,9 @@ function registerReducer(state = initialState, action) {
         .set('success', false)
         .set('error', action.error);
     case RESET_REGISTER:
-      return initialState;
+      return state
+        .set('error', false)
+        .set('success', false);
     default:
       return state;
   }
